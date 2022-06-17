@@ -1,0 +1,79 @@
+.SizeMap > div {
+	height: 65vh !important;
+}
+
+.box-img {
+	background-image: url("src/assets/meds-lg.png");
+	background-repeat: no-repeat;
+}
+
+.paper-st {
+	position: absolute;
+	top: 17%;
+	left: 5%;
+	width: 50%;
+	height: 400px;
+	padding: 34px 34px 0px 45px;
+	color: white !important;
+	border-radius: 8px 0px 0px 0px !important;
+	border-right: 45px solid #00b0bb;
+	border-bottom: 45px solid #00b0bb;
+	border-radius: 10px !important;
+}
+
+.MuiInput-formControl {
+	border: none !important;
+}
+
+.Mui-focused {
+	border-radius: 5px;
+}
+
+.MuiFormControl-root {
+	background-color: white;
+	border-radius: 5px;
+}
+
+/* #d6f0f98f; */
+.keep {
+	background: #018e9841;
+	padding: 10px 5px;
+	font-size: inherit;
+	font-weight: 700;
+	position: relative;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.keep::before {
+	content: "";
+	position: absolute;
+	display: block;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 3px;
+	background: #018f98;
+	transition: all 0.3s;
+	box-shadow: 0 215px #018f98;
+}
+
+.keep::after {
+	content: "";
+	position: absolute;
+	display: block;
+	right: 0;
+	top: 0;
+	width: 3px;
+	height: 0;
+	background: #018f98;
+	transition: all 0.25s;
+	box-shadow: -275px 0 #018f98;
+}
+.keep:hover::before {
+	width: 100%;
+}
+
+.keep:hover::after {
+	height: 100%;
+}
