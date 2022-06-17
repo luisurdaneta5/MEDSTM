@@ -11,6 +11,8 @@ import {
 	Grid,
 } from "@mui/material";
 
+import { Link } from "react-router-dom";
+
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
@@ -19,8 +21,6 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import logo from "../assets/logo.png";
 
 export const GeneralLayout = ({ children }) => {
-	const pages = ["INICIO", "UNETE", "CONTACTANOS"];
-
 	return (
 		<>
 			<Box
@@ -155,26 +155,43 @@ export const GeneralLayout = ({ children }) => {
 								justifyContent: "flex-end",
 							}}
 						>
-							<Button
-								// onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
+							<Link
+								to='/'
+								style={{
+									textDecoration: "none",
 									color: "black",
-									display: "block",
 								}}
 							>
-								Inicio
-							</Button>
-							<Button
-								// onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
+								<Button
+									// onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: "black",
+										display: "block",
+									}}
+								>
+									Inicio
+								</Button>
+							</Link>
+
+							<Link
+								to='/join-us'
+								style={{
+									textDecoration: "none",
 									color: "black",
-									display: "block",
 								}}
 							>
-								UNETE
-							</Button>
+								<Button
+									// onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: "black",
+										display: "block",
+									}}
+								>
+									UNETE
+								</Button>
+							</Link>
 							<Button
 								// onClick={handleCloseNavMenu}
 								sx={{

@@ -22,17 +22,18 @@ import { ReactWorldCountriesMap } from "react-world-countries-map";
 
 export const HomeScreen = () => {
 	const data = [
-		{ country: "cn", value: 1 }, // china
-		{ country: "in", value: 1311559204 }, // india
-		{ country: "us", value: 331883986 }, // united states
-		{ country: "id", value: 264935824 }, // indonesia
-		{ country: "pk", value: 210797836 }, // pakistan
-		{ country: "br", value: 210301591 }, // brazil
-		{ country: "ng", value: 208679114 }, // nigeria
-		{ country: "bd", value: 161062905 }, // bangladesh
-		{ country: "ru", value: 141944641 }, // russia
-		{ country: "mx", value: 127318112 }, // mexico
-		{ country: "ve", value: 30000000000 }, // mexico
+		{ country: "cn", value: 50 }, // china
+		{ country: "in", value: 100 }, // india
+		{ country: "us", value: 200 }, // united states
+		{ country: "id", value: 220 }, // indonesia
+		{ country: "pk", value: 800 }, // pakistan
+		{ country: "br", value: 20 }, // brazil
+		{ country: "ng", value: 5 }, // nigeria
+		{ country: "bd", value: 500 }, // bangladesh
+		{ country: "ru", value: 1 }, // russia
+		{ country: "mx", value: 20 }, // mexico
+		{ country: "ve", value: 30 }, // mexico
+		{ country: "co", value: 80 }, // mexico
 	];
 
 	const [formValues, handleInputChange, reset] = useForm({
@@ -166,12 +167,12 @@ export const HomeScreen = () => {
 				}}
 			>
 				<Container maxWidth='lg'>
-					<Grid container spacing={2}>
-						<Grid item xs={12} sm={9}>
+					<Grid container spacing={5}>
+						<Grid item xs={12} sm={6}>
 							<Typography
 								color='white'
 								sx={{
-									fontSize: "28px",
+									fontSize: "20px",
 									fontWeight: 600,
 								}}
 							>
@@ -192,20 +193,52 @@ export const HomeScreen = () => {
 								Ipsum available, but the majority
 								<br /> have suffered Lorem Ipsum
 							</Typography>
-						</Grid>
-						<Grid
-							item
-							xs={12}
-							sm={3}
-							sx={{
-								display: "flex",
-								alignItems: "center",
-								justifyContent: "center",
-							}}
-						>
 							<Button
+								fullWidth
 								variant='contained'
 								sx={{
+									mt: 2,
+									backgroundColor: "white",
+									color: "primary.main",
+									"&:hover": {
+										backgroundColor: "black",
+										color: "white",
+									},
+								}}
+							>
+								Registrate Ahora
+							</Button>
+						</Grid>
+						<Grid item xs={12} sm={6}>
+							<Typography
+								color='white'
+								sx={{
+									fontSize: "20px",
+									fontWeight: 600,
+								}}
+							>
+								Es un Medico apasionado y puede brindar
+								servicios de <br />
+								clase mundial ?
+							</Typography>
+							<Divider
+								sx={{
+									borderColor: "white",
+									borderWidth: "1px",
+									width: "100%",
+									mb: 1,
+								}}
+							/>
+							<Typography sx={{ color: "white" }}>
+								There are many variations of passages of Lorem
+								Ipsum available, but the majority
+								<br /> have suffered Lorem Ipsum
+							</Typography>
+							<Button
+								fullWidth
+								variant='contained'
+								sx={{
+									mt: 2,
 									backgroundColor: "white",
 									color: "primary.main",
 									"&:hover": {
