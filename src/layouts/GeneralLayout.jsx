@@ -18,7 +18,10 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
 
+import logo_letra from "../assets/logo_simple.png";
 import logo from "../assets/logo.png";
+
+import letras from "../assets/letras.png";
 
 export const GeneralLayout = ({ children }) => {
 	return (
@@ -49,6 +52,12 @@ export const GeneralLayout = ({ children }) => {
 							{/* <Typography variant='' color='white'>
 								Siguenos
 							</Typography> */}
+							<Link to='/login'>
+								<Typography sx={{ mr: 2, color: "white" }}>
+									Iniciar Sesion
+								</Typography>
+							</Link>
+
 							<Typography
 								component='a'
 								href='http://instagram.com'
@@ -63,29 +72,20 @@ export const GeneralLayout = ({ children }) => {
 							>
 								<FacebookOutlinedIcon />
 							</Typography>
-							<Typography
-								component='a'
-								href='http://instagram.com'
-								sx={{ color: "white" }}
-							>
-								<LinkedInIcon />
-							</Typography>
-							<Typography
-								component='a'
-								href='http://instagram.com'
-								sx={{ color: "white" }}
-							>
-								<TwitterIcon />
-							</Typography>
 						</Box>
 					</Box>
 				</Container>
 			</Box>
-			<AppBar position='static' sx={{ backgroundColor: "white" }}>
+			<AppBar
+				position='sticky'
+				sx={{ backgroundColor: "white" }}
+				className='animate__animated animate__fadeIn'
+			>
 				<Container maxWidth='lg'>
 					<Toolbar disableGutters>
 						<Box sx={{ display: "flex", alignItems: "center" }}>
-							<img src={logo} alt='medstm' width='100' />
+							<img src={logo_letra} alt='medstm' width='60px' />
+
 							<Box
 								sx={{
 									display: "flex",
@@ -177,7 +177,6 @@ export const GeneralLayout = ({ children }) => {
 							<Link
 								to='/join-us'
 								style={{
-									textDecoration: "none",
 									color: "black",
 								}}
 							>
@@ -192,26 +191,32 @@ export const GeneralLayout = ({ children }) => {
 									UNETE
 								</Button>
 							</Link>
-							<Button
-								// onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: "black",
-									display: "block",
-								}}
-							>
-								noticias
-							</Button>
-							<Button
-								// onClick={handleCloseNavMenu}
-								sx={{
-									my: 2,
-									color: "black",
-									display: "block",
-								}}
-							>
-								Contactanos
-							</Button>
+
+							<Link to='/blog'>
+								<Button
+									// onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: "black",
+										display: "block",
+									}}
+								>
+									noticias
+								</Button>
+							</Link>
+
+							<Link to='/contact-us'>
+								<Button
+									// onClick={handleCloseNavMenu}
+									sx={{
+										my: 2,
+										color: "black",
+										display: "block",
+									}}
+								>
+									Contactanos
+								</Button>
+							</Link>
 						</Box>
 					</Toolbar>
 				</Container>
@@ -220,7 +225,7 @@ export const GeneralLayout = ({ children }) => {
 			{children}
 
 			<footer>
-				<Container maxWidth='lg' sx={{ mt: 3 }}>
+				<Container maxWidth='lg' sx={{ mt: 5 }}>
 					<Divider
 						sx={{
 							"&.MuiDivider-root": {
@@ -232,9 +237,9 @@ export const GeneralLayout = ({ children }) => {
 					<Grid container spacing={3} sx={{ padding: "20px" }}>
 						<Grid item xs={12} sm={4}>
 							<Box sx={{ display: "flex", alignItems: "center" }}>
-								<img src={logo} alt='' />
+								<img src={logo} alt='medts' width='80%' />
 
-								<Typography
+								{/* <Typography
 									noWrap
 									component='a'
 									href='/'
@@ -248,7 +253,7 @@ export const GeneralLayout = ({ children }) => {
 									}}
 								>
 									MEDS TM
-								</Typography>
+								</Typography> */}
 							</Box>
 						</Grid>
 						<Grid item xs={12} sm={4}>
@@ -262,18 +267,19 @@ export const GeneralLayout = ({ children }) => {
 							>
 								SIGUENOS!
 							</Typography>
-							<Box sx={{ display: "flex", mt: 2 }}>
+							<Box
+								sx={{
+									display: "flex",
+									mt: 2,
+									justifyContent: "left",
+									alignItems: "center",
+								}}
+							>
 								<IconButton>
 									<InstagramIcon />
 								</IconButton>
 								<IconButton>
 									<FacebookOutlinedIcon />
-								</IconButton>
-								<IconButton>
-									<LinkedInIcon />
-								</IconButton>
-								<IconButton>
-									<TwitterIcon />
 								</IconButton>
 							</Box>
 						</Grid>
@@ -288,8 +294,6 @@ export const GeneralLayout = ({ children }) => {
 								CONTACTANOS!
 							</Typography>
 							<Typography sx={{ mt: 2 }}>
-								123-A, Lorem ipsum consectetur adipiscing elit{" "}
-								<br />
 								Phone: +91-xxx xxx xxxx
 								<br />
 								Email:info@medicaltourism.india

@@ -102,3 +102,24 @@
 .keep3:hover::after {
 	height: 100%;
 }
+
+.dropzone {
+	cursor: pointer;
+	align-items: center;
+	padding: 20px;
+	border-width: 2px;
+	border-radius: 2px;
+	border-color: #eeeeee;
+	border-style: dashed;
+	background-color: #fafafa;
+	color: #bdbdbd;
+	outline: none;
+	transition: border 0.24s ease-in-out;
+}
+
+.items-inside {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: flex-start !important;
+	margin-bottom: 20px;
+}
