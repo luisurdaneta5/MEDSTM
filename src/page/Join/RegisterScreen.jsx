@@ -11,14 +11,16 @@ import {
 	MenuItem,
 	Checkbox,
 	Button,
-	Alert,
+	Input,
+	Autocomplete,
 } from "@mui/material";
 import { countries } from "../../data/countries";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "../../hooks/useForm";
 import { toast } from "react-toastify";
-import { useDropzone } from "react-dropzone";
+import { useDispatch } from "react-redux";
+import { setRegister } from "../../store/slices/auth";
 
 const initialState = {
 	firstName: "",
@@ -29,50 +31,27 @@ const initialState = {
 	province: "",
 	country_code: "",
 	phone: "",
+	file1: "",
+	file2: "",
 };
+
 export const RegisterScreen = () => {
 	const { user } = useParams();
 
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
 	const [formValues, handleInputChange] = useForm(initialState);
 
-	const { getRootProps, getInputProps, open, acceptedFiles } = useDropzone({
-		// Disable click and keydown behavior
-		noClick: true,
-		noKeyboard: true,
+	const [country_value, setCountry_value] = useState({
+		country: "",
+		country_code: "",
 	});
 
-	console.log(acceptedFiles);
-	const handleRemoveItem = (index) => {
-		acceptedFiles.splice(0, index);
-		console.log("hola");
-	};
+	const { country, country_code } = country_value;
 
-	const files = acceptedFiles.map((file) => (
-		<Box key={file.path} className='items-inside'>
-			<Typography component={"li"}>{file.path}</Typography>
-			<Button
-				variant='contained'
-				color='error'
-				onClick={handleRemoveItem(file.index)}
-				sx={{ zIndex: 2 }}
-			>
-				Delete
-			</Button>
-		</Box>
-	));
-
-	const {
-		firstName,
-		lastName,
-		email,
-		country,
-		city,
-		province,
-		country_code,
-		phone,
-	} = formValues;
+	const { firstName, lastName, email, city, province, phone, file1, file2 } =
+		formValues;
 
 	const [checked, setChecked] = useState(false);
 
@@ -83,6 +62,18 @@ export const RegisterScreen = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (checked) {
+			dispatch(
+				setRegister(
+					firstName,
+					lastName,
+					email,
+					country,
+					city,
+					province,
+					country_code,
+					phone
+				)
+			);
 			navigate("/", {
 				replace: true,
 			});
@@ -158,12 +149,9 @@ export const RegisterScreen = () => {
 									onChange={handleInputChange}
 								/>
 							</Grid>
-							<Grid item lg={4}>
-								<FormControl fullWidth>
-									<InputLabel
-										id='demo-simple-select-label'
-										sx={{ mt: -1 }}
-									>
+							<Grid item lg={4} sx={{ mt: 1 }}>
+								{/* <FormControl fullWidth>
+									<InputLabel id='demo-simple-select-label'>
 										Pais
 									</InputLabel>
 									<Select
@@ -184,10 +172,56 @@ export const RegisterScreen = () => {
 											</MenuItem>
 										))}
 									</Select>
-								</FormControl>
+								</FormControl> */}
+
+								<Autocomplete
+									id='country-select-demo'
+									options={countries}
+									autoHighlight
+									getOptionLabel={(option) => option.label}
+									onChange={(event, value) =>
+										setCountry_value({
+											country: value.label,
+											country_code: value.code,
+										})
+									}
+									renderOption={(props, option) => (
+										<Box
+											component='li'
+											sx={{
+												"& > img": {
+													mr: 2,
+													flexShrink: 0,
+												},
+											}}
+											{...props}
+										>
+											<img
+												loading='lazy'
+												width='20'
+												src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+												srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+												alt=''
+											/>
+											{option.label}
+										</Box>
+									)}
+									name='country'
+									renderInput={(params) => (
+										<TextField
+											{...params}
+											label='Pais'
+											inputProps={{
+												...params.inputProps,
+												autoComplete: "new-password", // disable autocomplete and autofill
+											}}
+											size='small'
+										/>
+									)}
+								/>
 							</Grid>
 
-							<Grid item lg={4}>
+							<Grid item lg={4} sx={{ mt: 1 }}>
 								<TextField
 									id=''
 									label='Provincia/Estado'
@@ -199,7 +233,7 @@ export const RegisterScreen = () => {
 									onChange={handleInputChange}
 								/>
 							</Grid>
-							<Grid item lg={4}>
+							<Grid item lg={4} sx={{ mt: 1 }}>
 								<TextField
 									id=''
 									label='Ciudad/Municipio'
@@ -216,50 +250,49 @@ export const RegisterScreen = () => {
 								value={user}
 								name='type_user'
 							/>
-							<Grid item lg={12}>
-								<section className='container'>
-									<div
-										{...getRootProps({
-											className: "dropzone",
-										})}
-									>
-										<input {...getInputProps()} />
-										<div>
-											{files.length !== 0 ? (
-												<Typography component={"ul"}>
-													{files}
-												</Typography>
-											) : (
-												<Box
-													sx={{
-														display: "flex",
-														justifyContent:
-															"space-between",
-													}}
-												>
-													<Alert
-														variant='outlined'
-														severity='warning'
-													>
-														Arrastre y suelte
-														algunos archivos aquí, o
-														haga click en el boton
-														de seleccionar archivos
-													</Alert>
-													<Button
-														variant='contained'
-														size='small'
-														onClick={open}
-													>
-														Seleccionar Archivos...
-													</Button>
-												</Box>
-											)}
-										</div>
-									</div>
-								</section>
-							</Grid>
 
+							<Grid item lg={6}>
+								<InputLabel
+									sx={{
+										textAlign: "center",
+										mb: 2,
+										mt: 1,
+										fontWeight: "bold",
+									}}
+								>
+									Curriculum
+								</InputLabel>
+								<Input
+									type='file'
+									className='dropzone'
+									fullWidth
+									disableUnderline={true}
+									value={file1}
+									onChange={handleInputChange}
+									name='file1'
+								/>
+							</Grid>
+							<Grid item lg={6}>
+								<InputLabel
+									sx={{
+										textAlign: "center",
+										mb: 2,
+										mt: 1,
+										fontWeight: "bold",
+									}}
+								>
+									Titulo Universitario
+								</InputLabel>
+								<Input
+									type='file'
+									className='dropzone'
+									fullWidth
+									disableUnderline={true}
+									value={file2}
+									onChange={handleInputChange}
+									name='file2'
+								/>
+							</Grid>
 							<Grid item lg={12}>
 								<Typography color='red' sx={{ fontSize: 13 }}>
 									Nota: luego del registro se debe esperar un

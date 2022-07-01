@@ -19,6 +19,7 @@ import "./styles.css";
 import { useForm } from "../../hooks/useForm";
 import map from "../../assets/map.png";
 import { ReactWorldCountriesMap } from "react-world-countries-map";
+import { useNavigate } from "react-router-dom";
 
 export const HomeScreen = () => {
 	const data = [
@@ -36,9 +37,19 @@ export const HomeScreen = () => {
 		{ country: "co", value: 80 }, // mexico
 	];
 
+	const navigate = useNavigate();
+
 	const [formValues, handleInputChange, reset] = useForm({
 		search: "",
 	});
+
+	const { search } = formValues;
+
+	const onSearchSubmit = (e) => {
+		e.preventDefault();
+		if (search.trim().length <= 1) return;
+		navigate(`/search?query=${search.toLowerCase().trim()}`);
+	};
 
 	const [icon, setIcon] = useState(false);
 
@@ -52,7 +63,6 @@ export const HomeScreen = () => {
 		console.log("Busqueda reiniciada");
 	};
 
-	const { search } = formValues;
 	return (
 		<GeneralLayout>
 			<Box
@@ -84,7 +94,7 @@ export const HomeScreen = () => {
 							Eum, expedita. Officia, officiis. Consequuntur, ut
 							consequatur.
 						</Typography>
-						<form>
+						<form onSubmit={onSearchSubmit}>
 							<Box sx={{ mt: 3 }}>
 								<FormControl fullWidth variant='outlined'>
 									<OutlinedInput

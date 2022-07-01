@@ -97,6 +97,7 @@ export const GeneralLayout = ({ children }) => {
 									component='a'
 									href='/'
 									sx={{
+										ml: 2,
 										fontSize: "15px",
 										fontFamily: "Montserrat, sans-serif",
 										fontWeight: 800,
@@ -107,7 +108,7 @@ export const GeneralLayout = ({ children }) => {
 								>
 									MEDS TM
 								</Typography>
-								<Typography sx={{ color: "black" }}>
+								<Typography sx={{ ml: 2, color: "black" }}>
 									Directorio Sanitario Internacional
 								</Typography>
 							</Box>

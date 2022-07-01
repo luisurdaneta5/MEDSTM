@@ -661,69 +661,6 @@ export const FreeScreen = () => {
 												</Typography>
 											</AccordionDetails>
 										</Accordion>
-										<Accordion
-											sx={{
-												border: "1px solid #018f98",
-												backgroundColor: "transparent",
-												color: "#018f98",
-											}}
-										>
-											<AccordionSummary
-												aria-controls='panel2a-content'
-												id='panel2a-header'
-											>
-												<Typography
-													sx={{ fontWeight: 800 }}
-												>
-													Administración
-												</Typography>
-											</AccordionSummary>
-											<AccordionDetails
-												sx={{ textAlign: "left" }}
-											>
-												<Typography component='ul'>
-													<Typography component='li'>
-														<strong>
-															{" "}
-															Todo Promotor y
-															Profesional de la
-															Salud{" "}
-														</strong>
-														podrá trabajar en
-														<strong>
-															{" "}
-															MEDS TM{" "}
-														</strong>
-														como
-														<strong>
-															{" "}
-															Administrador{" "}
-														</strong>
-														anexando a todos los
-														profesionales de la
-														salud en el motor de
-														búsqueda. Tomando como
-														referencia Google,
-														Doctoralia, Top Doctors,
-														entre otros directorios
-														y buscadores.
-													</Typography>
-													<Typography component='li'>
-														<strong>
-															{" "}
-															Recibiendo: $0.10
-															Tether USDT{" "}
-														</strong>
-														por cada Profesional de
-														la salud que anexes
-														(desde tu administrador)
-														al directorio. También
-														el 1% del trabajo de tus
-														administradores.
-													</Typography>
-												</Typography>
-											</AccordionDetails>
-										</Accordion>
 									</Box>
 								</Box>
 							</Box>

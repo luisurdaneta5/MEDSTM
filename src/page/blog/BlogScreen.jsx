@@ -80,22 +80,9 @@ export const BlogScreen = () => {
 				</Box>
 				<Divider />
 
-				<Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-					<Stack spacing={2}>
-						<Pagination
-							count={10}
-							renderItem={(item) => (
-								<PaginationItem
-									components={{
-										previous: ArrowBackIcon,
-										next: ArrowForwardIcon,
-									}}
-									{...item}
-								/>
-							)}
-						/>
-					</Stack>
-				</Box>
+				<Stack spacing={2} sx={{ mt: 4, alignItems: " center" }}>
+					<Pagination count={10} variant='outlined' color='primary' />
+				</Stack>
 			</Container>
 		</GeneralLayout>
 	);
