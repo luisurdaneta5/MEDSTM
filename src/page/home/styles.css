@@ -1,5 +1,6 @@
 .SizeMap > div {
 	height: 65vh !important;
+	width: 100% !important;
 }
 
 .box-img {
@@ -76,4 +77,12 @@
 
 .keep:hover::after {
 	height: 100%;
+}
+
+path {
+	stroke-opacity: 1 !important;
+}
+
+rect {
+	height: 65px;
 }

@@ -1,11 +1,14 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { HomeScreen } from "../page/home/HomeScreen";
+import { DashboardRouter } from "./DashboardRouter";
+import { PageRouter } from "./PageRouter";
 
 export const AppRouter = () => {
 	return (
 		<Routes>
-			<Route path='/' element={<HomeScreen />} />
+			<Route path='*' element={<PageRouter />} />
+
+			<Route path='/dashboard/*' element={<DashboardRouter />} />
 		</Routes>
 	);
 };
