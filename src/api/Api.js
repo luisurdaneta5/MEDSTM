@@ -3,8 +3,8 @@ import { getEnvVariables } from "../helpers";
 
 const { VITE_API_URL } = getEnvVariables();
 
-const authApi = axios.create({
+const Api = axios.create({
 	baseURL: VITE_API_URL,
 });
 
-export default authApi;
+export default Api;

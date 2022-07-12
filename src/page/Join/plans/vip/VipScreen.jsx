@@ -463,7 +463,7 @@ export const VipScreen = () => {
 														<Typography
 															component='li'
 															style={{
-																color: "#0080000",
+																color: "#008000",
 															}}
 														>
 															Miembro

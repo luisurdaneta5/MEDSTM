@@ -72,46 +72,51 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 						</ListItem>
 					</Link>
 
-					<ListItem disablePadding>
-						<ListItemButton>
-							<ListItemIcon>
-								<i
-									class='fa-solid fa-user-doctor'
-									style={{
-										color: "white",
-										fontSize: 18,
-										marginLeft: 5,
-									}}
-								></i>
-							</ListItemIcon>
-							<Grid container>
-								<ListItemText>Medicos</ListItemText>
-							</Grid>
-						</ListItemButton>
-					</ListItem>
+					<Link to='/dashboard/meds'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-user-doctor'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Medicos</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
+
+					<Link to='/dashboard/promoters'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-user-tie'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Promotores</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
 
 					<ListItem disablePadding>
 						<ListItemButton>
 							<ListItemIcon>
 								<i
-									class='fa-solid fa-user-tie'
-									style={{
-										color: "white",
-										fontSize: 18,
-										marginLeft: 5,
-									}}
-								></i>
-							</ListItemIcon>
-							<Grid container>
-								<ListItemText>Promotores</ListItemText>
-							</Grid>
-						</ListItemButton>
-					</ListItem>
-					<ListItem disablePadding>
-						<ListItemButton>
-							<ListItemIcon>
-								<i
-									class='fa-solid fa-square-rss'
+									className='fa-solid fa-square-rss'
 									style={{
 										color: "white",
 										fontSize: 18,
@@ -128,7 +133,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 						<ListItemButton>
 							<ListItemIcon>
 								<i
-									class='fa-solid fa-money-bill-transfer'
+									className='fa-solid fa-money-bill-transfer'
 									style={{
 										color: "white",
 										fontSize: 18,
@@ -146,7 +151,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 						<ListItemButton>
 							<ListItemIcon>
 								<i
-									class='fa-solid fa-users'
+									className='fa-solid fa-users'
 									style={{
 										color: "white",
 										fontSize: 18,
@@ -159,6 +164,26 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 							</Grid>
 						</ListItemButton>
 					</ListItem>
+
+					<Link to='/dashboard/requests'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-clock'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Solicitudes</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
 				</List>
 			</Drawer>
 		</Box>

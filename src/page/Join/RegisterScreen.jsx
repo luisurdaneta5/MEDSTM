@@ -2,13 +2,10 @@ import { GeneralLayout } from "../../layouts/GeneralLayout";
 import {
 	Box,
 	Container,
-	FormControl,
 	Grid,
 	InputLabel,
-	Select,
 	TextField,
 	Typography,
-	MenuItem,
 	Checkbox,
 	Button,
 	Input,
@@ -42,16 +39,25 @@ export const RegisterScreen = () => {
 	const navigate = useNavigate();
 
 	const [formValues, handleInputChange] = useForm(initialState);
+	const { firstName, lastName, email, city, province, phone } = formValues;
 
 	const [country_value, setCountry_value] = useState({
 		country: "",
 		country_code: "",
 	});
-
 	const { country, country_code } = country_value;
 
-	const { firstName, lastName, email, city, province, phone, file1, file2 } =
-		formValues;
+	const [file1, setFile1] = useState();
+
+	const handleFileChange1 = ({ target }) => {
+		setFile1(target.files[0]);
+	};
+
+	const [file2, setFile2] = useState();
+
+	const handleFileChange2 = ({ target }) => {
+		setFile2(target.files[0]);
+	};
 
 	const [checked, setChecked] = useState(false);
 
@@ -61,22 +67,61 @@ export const RegisterScreen = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+
 		if (checked) {
-			dispatch(
-				setRegister(
-					firstName,
-					lastName,
-					email,
-					country,
-					city,
-					province,
-					country_code,
-					phone
-				)
-			);
-			navigate("/", {
-				replace: true,
-			});
+			if (user === "professional-healthcare") {
+				if (file1 === undefined) {
+					toast("Ingrese Curriculum", {
+						type: "error",
+						autoClose: 5000,
+						position: "top-right",
+						draggable: true,
+					});
+
+					if (file2 === undefined) {
+						toast("Ingrese un Titulo Universitario", {
+							type: "error",
+							autoClose: 5000,
+							position: "top-right",
+							draggable: true,
+						});
+					}
+				} else {
+					dispatch(
+						setRegister(
+							user,
+							firstName,
+							lastName,
+							email,
+							country,
+							city,
+							province,
+							country_code,
+							phone,
+							file1,
+							file2
+						)
+					);
+				}
+			} else {
+				dispatch(
+					setRegister(
+						user,
+						firstName,
+						lastName,
+						email,
+						country,
+						city,
+						province,
+						country_code,
+						phone
+					)
+				);
+			}
+
+			// navigate("/", {
+			// 	replace: true,
+			// });
 		} else {
 			toast("Porfavor, debe aceptar los terminos y condiciones", {
 				type: "error",
@@ -101,7 +146,7 @@ export const RegisterScreen = () => {
 							SOLICITUD DE REGISTRO
 						</Typography>
 					</Box>
-					<form onSubmit={handleSubmit}>
+					<form onSubmit={handleSubmit} encType='multipart/form-data'>
 						<Grid container spacing={2} sx={{ mt: 3 }}>
 							<Grid item lg={6}>
 								<TextField
@@ -150,30 +195,6 @@ export const RegisterScreen = () => {
 								/>
 							</Grid>
 							<Grid item lg={4} sx={{ mt: 1 }}>
-								{/* <FormControl fullWidth>
-									<InputLabel id='demo-simple-select-label'>
-										Pais
-									</InputLabel>
-									<Select
-										labelId='demo-simple-select-label'
-										id='demo-simple-select'
-										value={country}
-										name='country'
-										label='Pais'
-										size='small'
-										onChange={handleInputChange}
-									>
-										{countries.map((country) => (
-											<MenuItem
-												key={country.code}
-												value={country.code}
-											>
-												{country.country}
-											</MenuItem>
-										))}
-									</Select>
-								</FormControl> */}
-
 								<Autocomplete
 									id='country-select-demo'
 									options={countries}
@@ -245,54 +266,51 @@ export const RegisterScreen = () => {
 									onChange={handleInputChange}
 								/>
 							</Grid>
-							<input
-								type='hidden'
-								value={user}
-								name='type_user'
-							/>
+							{user === "professional-healthcare" ? (
+								<Grid container spacing={2} sx={{ mt: 1 }}>
+									<Grid item lg={6}>
+										<InputLabel
+											sx={{
+												textAlign: "center",
+												mb: 2,
+												fontWeight: "bold",
+											}}
+										>
+											Curriculum
+										</InputLabel>
+										<Input
+											type='file'
+											className='dropzone'
+											fullWidth
+											disableUnderline={true}
+											onChange={handleFileChange1}
+											name='file1'
+											required
+										/>
+									</Grid>
 
-							<Grid item lg={6}>
-								<InputLabel
-									sx={{
-										textAlign: "center",
-										mb: 2,
-										mt: 1,
-										fontWeight: "bold",
-									}}
-								>
-									Curriculum
-								</InputLabel>
-								<Input
-									type='file'
-									className='dropzone'
-									fullWidth
-									disableUnderline={true}
-									value={file1}
-									onChange={handleInputChange}
-									name='file1'
-								/>
-							</Grid>
-							<Grid item lg={6}>
-								<InputLabel
-									sx={{
-										textAlign: "center",
-										mb: 2,
-										mt: 1,
-										fontWeight: "bold",
-									}}
-								>
-									Titulo Universitario
-								</InputLabel>
-								<Input
-									type='file'
-									className='dropzone'
-									fullWidth
-									disableUnderline={true}
-									value={file2}
-									onChange={handleInputChange}
-									name='file2'
-								/>
-							</Grid>
+									<Grid item lg={6}>
+										<InputLabel
+											sx={{
+												textAlign: "center",
+												mb: 2,
+												fontWeight: "bold",
+											}}
+										>
+											Titulo Universitario
+										</InputLabel>
+										<Input
+											type='file'
+											className='dropzone'
+											fullWidth
+											disableUnderline={true}
+											onChange={handleFileChange2}
+											name='file2'
+										/>
+									</Grid>
+								</Grid>
+							) : null}
+
 							<Grid item lg={12}>
 								<Typography color='red' sx={{ fontSize: 13 }}>
 									Nota: luego del registro se debe esperar un
@@ -337,6 +355,7 @@ export const RegisterScreen = () => {
 								color='primary'
 								sx={{ mt: 3 }}
 								onClick={handleSubmit}
+								type='submit'
 							>
 								Registrarte
 							</Button>

@@ -26,9 +26,7 @@ export const NavBar = ({ drawerWidth }) => {
 					justifyContent='space-between'
 					alignItems={"center"}
 				>
-					<Typography variant='h6' componet='div'>
-						Dashboard
-					</Typography>
+					<Typography variant='h6' componet='div'></Typography>
 					<IconButton color='inherit'>
 						<LogoutOutlined />
 					</IconButton>

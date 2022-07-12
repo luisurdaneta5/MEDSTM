@@ -17,25 +17,20 @@ import HighlightOffTwoToneIcon from "@mui/icons-material/HighlightOffTwoTone";
 import { GeneralLayout } from "../../layouts/GeneralLayout";
 import "./styles.css";
 import { useForm } from "../../hooks/useForm";
-import map from "../../assets/map.png";
 import { ReactWorldCountriesMap } from "react-world-countries-map";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { getCountriesData } from "../../store/slices/ui/getCountriesData";
+import { useDispatch, useSelector } from "react-redux";
 
 export const HomeScreen = () => {
-	const data = [
-		{ country: "cn", value: 50 }, // china
-		{ country: "in", value: 100 }, // india
-		{ country: "us", value: 200 }, // united states
-		{ country: "id", value: 220 }, // indonesia
-		{ country: "pk", value: 800 }, // pakistan
-		{ country: "br", value: 20 }, // brazil
-		{ country: "ng", value: 5 }, // nigeria
-		{ country: "bd", value: 500 }, // bangladesh
-		{ country: "ru", value: 1 }, // russia
-		{ country: "mx", value: 20 }, // mexico
-		{ country: "ve", value: 30 }, // mexico
-		{ country: "co", value: 80 }, // mexico
-	];
+	const dispatch = useDispatch();
+
+	const { countries } = useSelector((state) => state.ui);
+
+	useEffect(() => {
+		dispatch(getCountriesData());
+	}, []);
 
 	const navigate = useNavigate();
 
@@ -163,7 +158,7 @@ export const HomeScreen = () => {
 						color='#018f98'
 						value-suffix='Medicos'
 						size='responsive'
-						data={data}
+						data={countries}
 					/>
 					{/* <img src={map} alt='' width='70%' /> */}
 				</Box>
