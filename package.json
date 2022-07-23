@@ -26,7 +26,8 @@
     "react-world-countries-map": "^1.1.0",
     "redux": "^4.2.0",
     "redux-thunk": "^2.4.1",
-    "save": "^2.5.0"
+    "save": "^2.5.0",
+    "sweetalert2": "^11.4.23"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

@@ -1,1 +1,2 @@
-export * from "./getUserInactive";
+export * from "./setApprovedUser";
+export * from "./setRejectedUser";

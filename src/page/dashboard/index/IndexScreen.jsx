@@ -4,15 +4,25 @@ import { Box, Grid, Paper, Typography } from "@mui/material";
 import { Api } from "../../../api";
 
 export const IndexScreen = () => {
-	const [users, setUsers] = useState([]);
+	const [meds, setMeds] = useState([]);
 	useEffect(() => {
-		Api.get("/user/requests/inactive")
-			.then((response) => {
-				setUsers(response.data.data);
-			})
-			.catch((e) => {
-				console.log(e);
-			});
+		Api.get(`/users?type=${3}`)
+			.then((response) => setMeds(response.data.users[0].count))
+			.catch((error) => console.log(error));
+	}, []);
+
+	const [promoters, setPromoters] = useState([]);
+	useEffect(() => {
+		Api.get(`/users?type=${4}`)
+			.then((response) => setPromoters(response.data.users[0].count))
+			.catch((error) => console.log(error));
+	}, []);
+
+	const [request, setRequest] = useState([]);
+	useEffect(() => {
+		Api.get(`/requests`)
+			.then((response) => setRequest(response.data.users[0].count))
+			.catch((error) => console.log(error));
 	}, []);
 
 	return (
@@ -39,7 +49,7 @@ export const IndexScreen = () => {
 							<Typography
 								sx={{ ml: 5, fontSize: 20, fontWeight: "bold" }}
 							>
-								20
+								{meds}
 							</Typography>
 						</Box>
 					</Paper>
@@ -65,7 +75,7 @@ export const IndexScreen = () => {
 							<Typography
 								sx={{ ml: 5, fontSize: 20, fontWeight: "bold" }}
 							>
-								20
+								{promoters}
 							</Typography>
 						</Box>
 					</Paper>
@@ -91,7 +101,7 @@ export const IndexScreen = () => {
 							<Typography
 								sx={{ ml: 5, fontSize: 20, fontWeight: "bold" }}
 							>
-								{users.length}
+								{request}
 							</Typography>
 						</Box>
 					</Paper>

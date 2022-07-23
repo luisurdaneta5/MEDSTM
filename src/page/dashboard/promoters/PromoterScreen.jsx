@@ -20,21 +20,39 @@ import {
 	Fab,
 	Avatar,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import moment from "moment";
+import { Api } from "../../../api";
 
 function createData(name, lastname, plan, vencimiento, status) {
 	return { name, lastname, plan, vencimiento, status };
 }
 
-const rows = [
-	createData("Luis", "Urdaneta", "Gratis", moment().format("Do MMM YYYY"), 1),
-	createData("Luis", "Quiroz", "Gratis", moment().format("Do MMM YYYY"), 0),
-];
-
 export const PromoterScreen = () => {
+	const [promoters, setPromoter] = useState([]);
+
+	useEffect(() => {
+		Api.get(`/user/all?type=${4}`)
+			.then((res) => {
+				setPromoter(res.data.users);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
+
+	const rows = promoters.map((promoter) => {
+		return createData(
+			promoter.name,
+			promoter.lastname,
+			promoter.plan,
+			Date.now(),
+			promoter.status
+		);
+	});
+
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 
@@ -147,9 +165,8 @@ export const PromoterScreen = () => {
 					<TableBody>
 						{results >= 0 ? (
 							<TableRow>
-								<TableCell colSpan={5} align='center'>
-									No se encontro ninguna busqueda que consida
-									con la palabra <strong>{search}</strong>
+								<TableCell colSpan={6} align='center'>
+									No hay datos disponibles...
 								</TableCell>
 							</TableRow>
 						) : (

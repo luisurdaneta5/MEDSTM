@@ -41,8 +41,10 @@ export const setRegister = (
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 
+			console.log(resp);
+
 			if (resp.data.ok) {
-				toast.success("Solicitud Enviada Correctamente", {
+				toast.success(resp.data.message, {
 					autoClose: 5000,
 					hideProgressBar: false,
 					closeOnClick: true,
@@ -52,6 +54,16 @@ export const setRegister = (
 				});
 			}
 		} catch (error) {
+			console.log(error);
+			toast.error(error.response.data.message, {
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+
 			if (!firstName) {
 				const msg = error.response.data.errors.name.msg;
 				toast.error(msg, {

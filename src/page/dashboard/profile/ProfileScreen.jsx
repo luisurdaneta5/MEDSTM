@@ -9,7 +9,6 @@ import {
 	TableContainer,
 	TableHead,
 	Typography,
-	Paper,
 	TableBody,
 	TableRow,
 	Tooltip,
@@ -18,33 +17,62 @@ import {
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getUserInactive } from "../../../store/slices/dashboard/getUserInactive";
-
-function createData(name, lastname, plan, code) {
-	return { name, lastname, plan, code };
-}
-
-const refers = [
-	createData("Luis", "Urdaneta", "Gratis", "12345"),
-	createData("Luis", "Quiroz", "Diamante", "12345"),
-];
+import { useNavigate, useParams } from "react-router-dom";
+import { Api } from "../../../api";
+import moment from "moment";
+import Swal from "sweetalert2";
+import { useDispatch } from "react-redux";
+import {
+	setApprovedUser,
+	setRejectedUser,
+} from "../../../store/slices/dashboard";
 
 export const ProfileScreen = () => {
 	const { id } = useParams();
 
-	const data = {
-		id: id,
-	};
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const [user, setUser] = useState({
+		Referrals: [],
+	});
 
-	const [user, setUser] = useState();
+	const {
+		name,
+		lastname,
+		country,
+		email,
+		phone,
+		status,
+		Documents,
+		Referrals,
+		date_request,
+	} = user;
 
 	useEffect(() => {
-		const datos = getUserInactive(data);
-		console.log(datos);
+		Api.get("/user/request/inactive", {
+			headers: { "Content-Type": "application/json" },
+			params: { id },
+		})
+			.then((res) => {
+				setUser(res.data.user);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 	}, []);
 
-	console.log(user);
+	function createData(name, lastname, plan, code) {
+		return { name, lastname, plan, code };
+	}
+
+	const refers = Referrals.map((referral) => {
+		return createData(
+			referral.User.name,
+			referral.User.lastname,
+			referral.User.plan,
+			"12345"
+		);
+	});
 
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
@@ -57,8 +85,66 @@ export const ProfileScreen = () => {
 		setRowsPerPage(parseInt(e.target.value, 10));
 		setPage(0);
 	};
+
+	const handleApproved = () => {
+		Swal.fire({
+			title: "",
+			text: "Estas seguro que deseas aprobar este usuario?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#018f98",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Si, aprobar",
+			cancelButtonText: "Cancelar",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				dispatch(setApprovedUser(id));
+			}
+		});
+	};
+
+	const handleRejected = () => {
+		Swal.fire({
+			title: "",
+			text: "Estas seguro que deseas rechazar la solicitud de este usuario?",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#018f98",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Si, rechazar",
+			cancelButtonText: "Cancelar",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				dispatch(setRejectedUser(id));
+				navigate("/dashboard/requests", { replace: true });
+			}
+		});
+	};
+
 	return (
 		<DashboardLayout>
+			<Box
+				sx={{
+					display: "flex",
+
+					justifyContent: "flex-end",
+				}}
+			>
+				<Box sx={{ mr: 2 }}>
+					<Button variant='contained' onClick={handleApproved}>
+						Aprobar
+					</Button>
+				</Box>
+				<Box>
+					<Button
+						variant='contained'
+						color='error'
+						onClick={handleRejected}
+					>
+						Rechazar
+					</Button>
+				</Box>
+			</Box>
 			<Grid container spacing={2}>
 				<Grid
 					item
@@ -96,7 +182,7 @@ export const ProfileScreen = () => {
 									Nombre:
 								</Typography>
 								<Typography color='initial'>
-									Luis Urdaneta
+									{name} {lastname}
 								</Typography>
 							</Box>
 
@@ -107,21 +193,38 @@ export const ProfileScreen = () => {
 									Fecha Solicitud:
 								</Typography>
 
-								<Typography>07/08/2022</Typography>
+								<Typography>
+									{moment(date_request).format("DD/MM/YYYY")}
+								</Typography>
 							</Box>
 
 							<Box sx={{ mt: 3 }}>
 								<Typography
 									sx={{ fontWeight: "bold", fontSize: 13 }}
 								>
-									Especialidades:
+									Correo Electronico:
 								</Typography>
-								<Typography color='initial' component='ul'>
-									<Typography component='li'>
-										Traumatologo
-									</Typography>
-								</Typography>
+
+								<Typography>{email}</Typography>
 							</Box>
+
+							{status !== 3 && (
+								<Box sx={{ mt: 3 }}>
+									<Typography
+										sx={{
+											fontWeight: "bold",
+											fontSize: 13,
+										}}
+									>
+										Especialidades:
+									</Typography>
+									<Typography color='initial' component='ul'>
+										<Typography component='li'>
+											Traumatologo
+										</Typography>
+									</Typography>
+								</Box>
+							)}
 						</Grid>
 
 						<Grid item xs={6}>
@@ -132,7 +235,9 @@ export const ProfileScreen = () => {
 									Cargo:
 								</Typography>
 								<Typography color='initial'>
-									Promotor
+									{user.type === "4"
+										? "Promotor"
+										: "Profesional de la Salud"}
 								</Typography>
 							</Box>
 
@@ -140,42 +245,52 @@ export const ProfileScreen = () => {
 								<Typography
 									sx={{ fontWeight: "bold", fontSize: 13 }}
 								>
-									Fecha Solicitud:
+									Telefono
 								</Typography>
 
-								<Typography>07/08/2022</Typography>
+								<Typography>{phone}</Typography>
 							</Box>
-						</Grid>
 
-						<Grid item xs={6}>
-							<Box>
+							<Box sx={{ mt: 3 }}>
 								<Typography
 									sx={{ fontWeight: "bold", fontSize: 13 }}
 								>
-									Curriculum:
+									Pais
 								</Typography>
-								<Button
-									variant='contained'
-									size='small'
-									fullWidth
-									startIcon={<DownloadIcon />}
-								>
-									Descargar
-								</Button>
+
+								<Typography>{country}</Typography>
 							</Box>
 						</Grid>
-						<Grid item xs={6}>
-							<Box>
-								<Typography
-									sx={{ fontWeight: "bold", fontSize: 13 }}
-								>
-									Titulo Universitario:
-								</Typography>
-								<Typography color='initial'>
-									Luis Urdaneta
-								</Typography>
-							</Box>
-						</Grid>
+
+						{Documents &&
+							Documents.map((document) => (
+								<Grid item xs={6} key={document.id}>
+									<Box>
+										<Typography
+											sx={{
+												fontWeight: "bold",
+												fontSize: 13,
+											}}
+										>
+											{document.type === "1"
+												? "Curriculum"
+												: "Titulo Universitario"}
+										</Typography>
+										<Button
+											variant='contained'
+											size='small'
+											fullWidth
+											startIcon={<DownloadIcon />}
+											component='a'
+											href={document.url}
+											download
+											target='_blank'
+										>
+											Descargar
+										</Button>
+									</Box>
+								</Grid>
+							))}
 					</Grid>
 				</Grid>
 				<Grid item xs={6}>
@@ -192,134 +307,142 @@ export const ProfileScreen = () => {
 							</TableHead>
 
 							<TableBody>
-								{refers.map((refer, index) => (
-									<TableRow key={index}>
-										<TableCell align='left'>
-											{refer.name} {refer.lastname}
-										</TableCell>
-										<TableCell align='left'>
-											{refer.plan === "Gratis" && (
-												<Tooltip title='Gratis'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "green",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Basic" && (
-												<Tooltip title='Basica'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#000080",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Bronce" && (
-												<Tooltip title='Bronce'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#800000",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Plata" && (
-												<Tooltip title='Plata'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#333333",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Oro" && (
-												<Tooltip title='Oro'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#ff9900",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Zafiro" && (
-												<Tooltip title='Zafiro'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#800080",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Rubi" && (
-												<Tooltip title='Rubi'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#ff0000",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Esmeralda" && (
-												<Tooltip title='Esmeralda'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#008000",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{refer.plan === "Diamante" && (
-												<Tooltip title='Diamante'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#ff00ff",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-										</TableCell>
-										<TableCell align='left'>
-											{refer.code}
+								{refers >= 0 ? (
+									<TableRow>
+										<TableCell colSpan={3} align='center'>
+											Este usuario no posee Referidos
 										</TableCell>
 									</TableRow>
-								))}
+								) : (
+									refers.map((refer, index) => (
+										<TableRow key={index}>
+											<TableCell align='left'>
+												{refer.name} {refer.lastname}
+											</TableCell>
+											<TableCell align='left'>
+												{refer.plan === "Gratis" && (
+													<Tooltip title='Gratis'>
+														<i
+															className='fa-solid fa-medal'
+															style={{
+																fontSize: 18,
+																color: "green",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Basic" && (
+													<Tooltip title='Basica'>
+														<i
+															className='fa-solid fa-medal'
+															style={{
+																fontSize: 18,
+																color: "#000080",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Bronce" && (
+													<Tooltip title='Bronce'>
+														<i
+															className='fa-solid fa-medal'
+															style={{
+																fontSize: 18,
+																color: "#800000",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Plata" && (
+													<Tooltip title='Plata'>
+														<i
+															className='fa-solid fa-medal'
+															style={{
+																fontSize: 18,
+																color: "#333333",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Oro" && (
+													<Tooltip title='Oro'>
+														<i
+															className='fa-solid fa-medal'
+															style={{
+																fontSize: 18,
+																color: "#ff9900",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Zafiro" && (
+													<Tooltip title='Zafiro'>
+														<i
+															className='fa-solid fa-gem'
+															style={{
+																fontSize: 18,
+																color: "#800080",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Rubi" && (
+													<Tooltip title='Rubi'>
+														<i
+															className='fa-solid fa-gem'
+															style={{
+																fontSize: 18,
+																color: "#ff0000",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Esmeralda" && (
+													<Tooltip title='Esmeralda'>
+														<i
+															className='fa-solid fa-gem'
+															style={{
+																fontSize: 18,
+																color: "#008000",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+
+												{refer.plan === "Diamante" && (
+													<Tooltip title='Diamante'>
+														<i
+															className='fa-solid fa-gem'
+															style={{
+																fontSize: 18,
+																color: "#ff00ff",
+																cursor: "pointer",
+															}}
+														></i>
+													</Tooltip>
+												)}
+											</TableCell>
+											<TableCell align='left'>
+												{refer.code}
+											</TableCell>
+										</TableRow>
+									))
+								)}
 							</TableBody>
 						</Table>
 					</TableContainer>

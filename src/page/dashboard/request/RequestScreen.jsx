@@ -38,7 +38,7 @@ export const RequestScreen = () => {
 	useEffect(() => {
 		Api.get("/user/requests/inactive")
 			.then((response) => {
-				setUsers(response.data.data);
+				setUsers(response.data.users);
 			})
 			.catch((e) => {
 				console.log(e);
@@ -218,7 +218,7 @@ export const RequestScreen = () => {
 														"space-between",
 												}}
 											>
-												<Grid item sm={4}>
+												<Grid item sm={12}>
 													<Link
 														to={`/dashboard/user/profile/${row.id}`}
 													>
@@ -232,7 +232,7 @@ export const RequestScreen = () => {
 													</Link>
 												</Grid>
 
-												<Grid item sm={4}>
+												{/* <Grid item sm={4}>
 													<Button
 														variant='contained'
 														size='small'
@@ -251,7 +251,7 @@ export const RequestScreen = () => {
 													>
 														RECHAZAR
 													</Button>
-												</Grid>
+												</Grid> */}
 											</Grid>
 										</TableCell>
 									</TableRow>
@@ -263,7 +263,7 @@ export const RequestScreen = () => {
 			<TablePagination
 				rowsPerPageOptions={[10, 20, 30]}
 				component='div'
-				count={rows.length}
+				count={200}
 				rowsPerPage={rowsPerPage}
 				page={page}
 				onPageChange={handleChangePage}

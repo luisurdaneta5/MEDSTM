@@ -21,21 +21,39 @@ import {
 	Avatar,
 } from "@mui/material";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import { Api } from "../../../api";
 
 function createData(name, lastname, plan, vencimiento, status) {
 	return { name, lastname, plan, vencimiento, status };
 }
 
-const rows = [
-	createData("Luis", "Urdaneta", "Gratis", Date.now(), 1),
-	createData("Luis", "Quiroz", "Gratis", Date.now(), 0),
-];
-
 export const MedsScreen = () => {
+	const [meds, setMeds] = useState([]);
+
+	useEffect(() => {
+		Api.get(`/user/all?type=${3}`)
+			.then((res) => {
+				setMeds(res.data.users);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
+
+	const rows = meds.map((med) => {
+		return createData(
+			med.name,
+			med.lastname,
+			med.plan,
+			Date.now(),
+			med.status
+		);
+	});
+
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
 
@@ -136,8 +154,8 @@ export const MedsScreen = () => {
 				<Table sx={{ minWidth: 650 }} size='small'>
 					<TableHead>
 						<TableRow>
-							<TableCell align='rigth'>Avatar</TableCell>
-							<TableCell align='rigth'>Nombre</TableCell>
+							<TableCell>Avatar</TableCell>
+							<TableCell>Nombre</TableCell>
 							<TableCell align='center'>Plan</TableCell>
 							<TableCell align='center'>Status</TableCell>
 							<TableCell align='center'>Vencimiento</TableCell>
@@ -148,9 +166,8 @@ export const MedsScreen = () => {
 					<TableBody>
 						{results >= 0 ? (
 							<TableRow>
-								<TableCell colSpan={5} align='center'>
-									No se encontro ninguna busqueda que consida
-									con la palabra <strong>{search}</strong>
+								<TableCell colSpan={6} align='center'>
+									No hay datos disponibles...
 								</TableCell>
 							</TableRow>
 						) : (
@@ -178,7 +195,7 @@ export const MedsScreen = () => {
 										<TableCell
 											component='th'
 											scope='row'
-											align='rigth'
+											align=''
 										>
 											{row.name} {row.lastname}
 										</TableCell>
