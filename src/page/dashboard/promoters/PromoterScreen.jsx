@@ -336,7 +336,13 @@ export const PromoterScreen = () => {
 											)}
 										</TableCell>
 										<TableCell align='center'>
-											{row.vencimiento}
+											{row.plan === "Gratis" ? (
+												<Typography>
+													Ilimitada
+												</Typography>
+											) : (
+												row.vencimiento
+											)}
 										</TableCell>
 
 										<TableCell align='right'>

@@ -4,6 +4,7 @@ export const authSlice = createSlice({
 	name: "auth",
 	initialState: {
 		name: "Luis Urdaneta",
+		isAuthenticated: true,
 	},
 	reducers: {
 		//Esto ahora sera mis acciones

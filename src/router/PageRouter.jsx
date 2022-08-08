@@ -9,6 +9,7 @@ import { PremiunScreen } from "../page/Join/plans/premiun/PremiunScreen";
 import { VipScreen } from "../page/Join/plans/vip/VipScreen";
 import { RegisterScreen } from "../page/Join/RegisterScreen";
 import { UserTypeScreen } from "../page/Join/UserTypeScreen";
+
 import { SearchScreen } from "../page/search/SearchScreen";
 
 export const PageRouter = () => {
@@ -44,6 +45,7 @@ export const PageRouter = () => {
 			<Route path='/contact-us' element={<ContactScreen />} />
 
 			<Route path='/search' element={<SearchScreen />} />
+
 			<Route path='/login' element={<LoginScreen />} />
 		</Routes>
 	);

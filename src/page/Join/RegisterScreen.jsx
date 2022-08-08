@@ -36,7 +36,6 @@ export const RegisterScreen = () => {
 	const { user } = useParams();
 
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
 
 	const [formValues, handleInputChange] = useForm(initialState);
 	const { firstName, lastName, email, city, province, phone } = formValues;

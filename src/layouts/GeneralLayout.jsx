@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	Container,
 	AppBar,
@@ -9,6 +9,13 @@ import {
 	Button,
 	Divider,
 	Grid,
+	Modal,
+	FormControl,
+	InputLabel,
+	Input,
+	TextField,
+	OutlinedInput,
+	InputAdornment,
 } from "@mui/material";
 
 import { Link } from "react-router-dom";
@@ -17,13 +24,50 @@ import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/Twitter";
-
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import logo_letra from "../assets/logo_simple.png";
 import logo from "../assets/logo.png";
 
 import letras from "../assets/letras.png";
 
+const style = {
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: 400,
+	bgcolor: "background.paper",
+	borderRadius: "5px",
+	boxShadow: 24,
+	p: 4,
+};
+
 export const GeneralLayout = ({ children }) => {
+	const [open, setOpen] = useState(false);
+	const handleOpen = () => setOpen(true);
+	const handleClose = () => setOpen(false);
+
+	const [values, setValues] = useState({
+		password: "",
+		showPassword: false,
+	});
+
+	const handleChange = (prop) => (event) => {
+		setValues({ ...values, [prop]: event.target.value });
+	};
+
+	const handleClickShowPassword = () => {
+		setValues({
+			...values,
+			showPassword: !values.showPassword,
+		});
+	};
+
+	const handleMouseDownPassword = (event) => {
+		event.preventDefault();
+	};
+
 	return (
 		<>
 			<Box
@@ -32,6 +76,178 @@ export const GeneralLayout = ({ children }) => {
 				}}
 			>
 				<Container maxWidth='lg'>
+					<Modal
+						open={open}
+						onClose={handleClose}
+						aria-labelledby='modal-modal-title'
+						aria-describedby='modal-modal-description'
+					>
+						<Box sx={style}>
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "center",
+								}}
+							>
+								<Typography
+									id='modal-modal-title'
+									variant='h6'
+									component='h2'
+								>
+									Bienvenidos a Medstm
+								</Typography>
+							</Box>
+							<Box
+								sx={{
+									display: "flex",
+									justifyContent: "center",
+								}}
+							>
+								<Typography
+									id='modal-modal-description'
+									sx={{ mt: 1, fontSize: "13px" }}
+								>
+									Ingrese con Correo y Contraseña
+								</Typography>
+							</Box>
+
+							<form>
+								<Box sx={{ mt: 5 }}>
+									<label
+										style={{
+											fontSize: "13px",
+											fontWeight: "bold",
+										}}
+									>
+										Correo electronico
+									</label>
+									<TextField
+										id=''
+										label=''
+										size='small'
+										fullWidth
+										placeholder='example@example.com'
+									/>
+								</Box>
+
+								<Box sx={{ mt: 2 }}>
+									<label
+										style={{
+											fontSize: "13px",
+											fontWeight: "bold",
+										}}
+									>
+										Contraseña
+									</label>
+									<FormControl sx={{}} size='small' fullWidth>
+										<OutlinedInput
+											id='outlined-adornment-password'
+											type={
+												values.showPassword
+													? "text"
+													: "password"
+											}
+											value={values.password}
+											onChange={handleChange("password")}
+											endAdornment={
+												<InputAdornment position='end'>
+													<IconButton
+														aria-label='toggle password visibility'
+														onClick={
+															handleClickShowPassword
+														}
+														onMouseDown={
+															handleMouseDownPassword
+														}
+														edge='end'
+													>
+														{values.showPassword ? (
+															<VisibilityOff />
+														) : (
+															<Visibility />
+														)}
+													</IconButton>
+												</InputAdornment>
+											}
+											placeholder='**********'
+										/>
+									</FormControl>
+								</Box>
+
+								<Box sx={{ mt: 2 }}>
+									<Button
+										variant='contained'
+										color='primary'
+										size='small'
+										fullWidth
+									>
+										Ingresar
+									</Button>
+								</Box>
+							</form>
+							<Box
+								sx={{
+									display: "flex",
+
+									justifyContent: "center",
+									mt: 2,
+								}}
+							>
+								<Typography
+									sx={{ display: "flex", fontSize: "15px" }}
+								>
+									No tienes una cuenta?
+									<Link to='/join-us'>
+										<Typography
+											component='u'
+											color='black'
+											sx={{
+												ml: 1,
+												fontWeight: "bold",
+												fontSize: "15px",
+											}}
+										>
+											Unete
+										</Typography>
+									</Link>
+								</Typography>
+							</Box>
+
+							<Box
+								sx={{
+									display: "flex",
+
+									justifyContent: "center",
+									mt: 2,
+								}}
+							>
+								<Typography
+									sx={{
+										display: "flex",
+										fontSize: "15px",
+										backgroundColor: "#f3f5f9",
+										borderRadius: "5px",
+										p: 3,
+									}}
+								>
+									Olvidate tu contraseña?
+									<Link to='/join-us'>
+										<Typography
+											component='u'
+											color='black'
+											sx={{
+												ml: 1,
+												fontWeight: "bold",
+												fontSize: "15px",
+											}}
+										>
+											Recuperala
+										</Typography>
+									</Link>
+								</Typography>
+							</Box>
+						</Box>
+					</Modal>
 					<Box
 						sx={{
 							display: "flex",
@@ -52,13 +268,19 @@ export const GeneralLayout = ({ children }) => {
 							{/* <Typography variant='' color='white'>
 								Siguenos
 							</Typography> */}
-							<Link to='/login'>
-								<Typography sx={{ mr: 2, color: "white" }}>
-									Iniciar Sesion
+							<Box onClick={handleOpen}>
+								<Typography
+									sx={{
+										mr: 0,
+										color: "white",
+										cursor: "pointer",
+									}}
+								>
+									INICIAR SESION
 								</Typography>
-							</Link>
+							</Box>
 
-							<Typography
+							{/* <Typography
 								component='a'
 								href='http://instagram.com'
 								sx={{ color: "white" }}
@@ -71,7 +293,7 @@ export const GeneralLayout = ({ children }) => {
 								sx={{ color: "white" }}
 							>
 								<FacebookOutlinedIcon />
-							</Typography>
+							</Typography> */}
 						</Box>
 					</Box>
 				</Container>

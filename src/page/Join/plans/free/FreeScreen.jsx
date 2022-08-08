@@ -16,9 +16,24 @@ import {
 	Button,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Api } from "../../../../api";
 export const FreeScreen = () => {
 	const { user } = useParams();
-	console.log(user);
+	const [plans, setPlans] = useState([]);
+
+	useEffect(() => {
+		Api.get("/plans")
+			.then((res) => {
+				setPlans(res.data.plans);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
+
+	console.log(plans);
+
 	return (
 		<GeneralLayout>
 			<Container maxWidth='lg' sx={{ mt: 4 }}>

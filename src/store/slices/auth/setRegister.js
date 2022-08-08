@@ -41,8 +41,6 @@ export const setRegister = (
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 
-			console.log(resp);
-
 			if (resp.data.ok) {
 				toast.success(resp.data.message, {
 					autoClose: 5000,

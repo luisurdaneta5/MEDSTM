@@ -1,0 +1,29 @@
+.img-container {
+	width: 300px;
+	height: 200px;
+	position: relative;
+	line-height: 0;
+}
+
+.img-container p {
+	height: 0;
+	margin: 0;
+
+	padding: 30% 0; /* == mitad de la imagen (height) */
+
+	color: #fff;
+	text-align: center;
+	background: #000;
+	transition: opacity 0.4s linear;
+	cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	opacity: 0;
+}
+
+.img-container:hover p {
+	opacity: 0.75;
+}

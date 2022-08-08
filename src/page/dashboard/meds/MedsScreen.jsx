@@ -154,8 +154,8 @@ export const MedsScreen = () => {
 				<Table sx={{ minWidth: 650 }} size='small'>
 					<TableHead>
 						<TableRow>
-							<TableCell>Avatar</TableCell>
-							<TableCell>Nombre</TableCell>
+							<TableCell align='left'>Avatar</TableCell>
+							<TableCell align='left'>Nombre</TableCell>
 							<TableCell align='center'>Plan</TableCell>
 							<TableCell align='center'>Status</TableCell>
 							<TableCell align='center'>Vencimiento</TableCell>
@@ -192,11 +192,7 @@ export const MedsScreen = () => {
 												src='/static/images/avatar/1.jpg'
 											/>
 										</TableCell>
-										<TableCell
-											component='th'
-											scope='row'
-											align=''
-										>
+										<TableCell component='th' scope='row'>
 											{row.name} {row.lastname}
 										</TableCell>
 										<TableCell align='center'>
@@ -341,7 +337,13 @@ export const MedsScreen = () => {
 											)}
 										</TableCell>
 										<TableCell align='center'>
-											{row.vencimiento}
+											{row.plan === "Gratis" ? (
+												<Typography>
+													Ilimitada
+												</Typography>
+											) : (
+												row.vencimiento
+											)}
 										</TableCell>
 
 										<TableCell align='right'>

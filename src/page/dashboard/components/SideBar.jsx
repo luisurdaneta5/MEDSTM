@@ -10,6 +10,7 @@ import {
 	ListItemText,
 	ListItemIcon,
 	Grid,
+	Avatar,
 } from "@mui/material";
 import logo from "../../../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
@@ -59,6 +60,20 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 				</Toolbar>
 
 				<List sx={{ mt: 5, color: "white" }}>
+					{/* <Box
+						sx={{
+							display: "flex",
+							justifyContent: "center",
+							mb: 8,
+						}}
+					>
+						<Avatar
+							alt={"Luis"}
+							src='/static/images/avatar/1.jpg'
+							sx={{ width: 80, height: 80 }}
+						/>
+					</Box> */}
+
 					<Link to={"/dashboard"}>
 						<ListItem disablePadding>
 							<ListItemButton>
@@ -112,58 +127,64 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 						</ListItem>
 					</Link>
 
-					<ListItem disablePadding>
-						<ListItemButton>
-							<ListItemIcon>
-								<i
-									className='fa-solid fa-square-rss'
-									style={{
-										color: "white",
-										fontSize: 18,
-										marginLeft: 5,
-									}}
-								></i>
-							</ListItemIcon>
-							<Grid container>
-								<ListItemText>Blog</ListItemText>
-							</Grid>
-						</ListItemButton>
-					</ListItem>
-					<ListItem disablePadding>
-						<ListItemButton>
-							<ListItemIcon>
-								<i
-									className='fa-solid fa-money-bill-transfer'
-									style={{
-										color: "white",
-										fontSize: 18,
-										marginLeft: 5,
-									}}
-								></i>
-							</ListItemIcon>
-							<Grid container>
-								<ListItemText>Retiros</ListItemText>
-							</Grid>
-						</ListItemButton>
-					</ListItem>
+					<Link to='/dashboard/blogs'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-square-rss'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Blog</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
 
-					<ListItem disablePadding>
-						<ListItemButton>
-							<ListItemIcon>
-								<i
-									className='fa-solid fa-users'
-									style={{
-										color: "white",
-										fontSize: 18,
-										marginLeft: 5,
-									}}
-								></i>
-							</ListItemIcon>
-							<Grid container>
-								<ListItemText>Mis Referidos</ListItemText>
-							</Grid>
-						</ListItemButton>
-					</ListItem>
+					<Link to='/dashboard/withdrawals'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-money-bill-transfer'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Retiros</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
+					<Link to='/dashboard/speciality'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-list'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Especialidades</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
 
 					<Link to='/dashboard/requests'>
 						<ListItem disablePadding>
