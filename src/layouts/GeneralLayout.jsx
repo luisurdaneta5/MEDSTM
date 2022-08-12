@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
 	Container,
 	AppBar,
@@ -16,9 +16,11 @@ import {
 	TextField,
 	OutlinedInput,
 	InputAdornment,
+	CircularProgress,
+	Tooltip,
 } from "@mui/material";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import FacebookOutlinedIcon from "@mui/icons-material/FacebookOutlined";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -30,6 +32,9 @@ import logo_letra from "../assets/logo_simple.png";
 import logo from "../assets/logo.png";
 
 import letras from "../assets/letras.png";
+import { useDispatch, useSelector } from "react-redux";
+import { setLogin } from "../store/slices/auth/setLogin";
+import { setLogout } from "../store/slices/auth";
 
 const style = {
 	position: "absolute",
@@ -44,9 +49,23 @@ const style = {
 };
 
 export const GeneralLayout = ({ children }) => {
+	const dispatch = useDispatch();
+	const { isLoading, isAuthenticated } = useSelector((state) => state.auth);
+
+	const navigate = useNavigate();
+
+	// useEffect(() => {
+	// 	console.log("Entro en el Effect", isAuthenticated);
+	// 	if (isAuthenticated) {
+	// 		navigate("/profile");
+	// 	}
+	// }, [isAuthenticated]);
+
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
+
+	const [email, setEmail] = useState("");
 
 	const [values, setValues] = useState({
 		password: "",
@@ -68,6 +87,25 @@ export const GeneralLayout = ({ children }) => {
 		event.preventDefault();
 	};
 
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const to_navigate = (type) => {
+			if (type === "5") {
+				navigate("/dashboard");
+			} else if (type === "3") {
+				navigate("/profile");
+			} else if (type === "4") {
+				navigate("/profile");
+			}
+		};
+		dispatch(setLogin(email, values.password, to_navigate));
+	};
+
+	const handleLogout = () => {
+		localStorage.clear();
+		dispatch(setLogout());
+	};
+
 	return (
 		<>
 			<Box
@@ -83,35 +121,30 @@ export const GeneralLayout = ({ children }) => {
 						aria-describedby='modal-modal-description'
 					>
 						<Box sx={style}>
-							<Box
-								sx={{
-									display: "flex",
-									justifyContent: "center",
-								}}
-							>
-								<Typography
-									id='modal-modal-title'
-									variant='h6'
-									component='h2'
+							<form onSubmit={handleSubmit}>
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "center",
+									}}
 								>
-									Bienvenidos a Medstm
-								</Typography>
-							</Box>
-							<Box
-								sx={{
-									display: "flex",
-									justifyContent: "center",
-								}}
-							>
-								<Typography
-									id='modal-modal-description'
-									sx={{ mt: 1, fontSize: "13px" }}
+									<Typography variant='h6' component='h2'>
+										Bienvenidos a Medstm
+									</Typography>
+								</Box>
+								<Box
+									sx={{
+										display: "flex",
+										justifyContent: "center",
+									}}
 								>
-									Ingrese con Correo y Contraseña
-								</Typography>
-							</Box>
+									<Typography
+										sx={{ mt: 1, fontSize: "13px" }}
+									>
+										Ingrese con Correo y Contraseña
+									</Typography>
+								</Box>
 
-							<form>
 								<Box sx={{ mt: 5 }}>
 									<label
 										style={{
@@ -122,11 +155,13 @@ export const GeneralLayout = ({ children }) => {
 										Correo electronico
 									</label>
 									<TextField
-										id=''
-										label=''
 										size='small'
 										fullWidth
 										placeholder='example@example.com'
+										value={email}
+										onChange={(e) =>
+											setEmail(e.target.value)
+										}
 									/>
 								</Box>
 
@@ -141,7 +176,6 @@ export const GeneralLayout = ({ children }) => {
 									</label>
 									<FormControl sx={{}} size='small' fullWidth>
 										<OutlinedInput
-											id='outlined-adornment-password'
 											type={
 												values.showPassword
 													? "text"
@@ -180,8 +214,20 @@ export const GeneralLayout = ({ children }) => {
 										color='primary'
 										size='small'
 										fullWidth
+										type='submit'
 									>
-										Ingresar
+										{isLoading ? (
+											<Box sx={{ display: "flex" }}>
+												<CircularProgress
+													sx={{
+														color: "white",
+													}}
+													size={30}
+												/>
+											</Box>
+										) : (
+											"Ingresar"
+										)}
 									</Button>
 								</Box>
 							</form>
@@ -268,17 +314,50 @@ export const GeneralLayout = ({ children }) => {
 							{/* <Typography variant='' color='white'>
 								Siguenos
 							</Typography> */}
-							<Box onClick={handleOpen}>
-								<Typography
+
+							{isAuthenticated ? (
+								<Box
 									sx={{
-										mr: 0,
-										color: "white",
-										cursor: "pointer",
+										display: "flex",
 									}}
 								>
-									INICIAR SESION
-								</Typography>
-							</Box>
+									<Link to='/profile'>
+										<Typography
+											sx={{
+												mr: 0,
+												color: "white",
+												cursor: "pointer",
+											}}
+										>
+											IR A MI PERFIL
+										</Typography>
+									</Link>
+
+									<Box
+										sx={{
+											ml: 2,
+											cursor: "pointer",
+										}}
+										onClick={handleLogout}
+									>
+										<Tooltip title='Salir'>
+											<i className='fa-solid fa-arrow-right-from-bracket'></i>
+										</Tooltip>
+									</Box>
+								</Box>
+							) : (
+								<Box onClick={handleOpen}>
+									<Typography
+										sx={{
+											mr: 0,
+											color: "white",
+											cursor: "pointer",
+										}}
+									>
+										INICIAR SESION
+									</Typography>
+								</Box>
+							)}
 
 							{/* <Typography
 								component='a'

@@ -13,31 +13,6 @@ import "./styles.css";
 import { Link } from "react-router-dom";
 
 export const ProfileEditScreen = () => {
-	const [image, setImage] = useState("");
-
-	const handleChangeImage = (e) => {
-		let timerInterval;
-		Swal.fire({
-			title: "Subiendo imagen",
-			html: "Por favor espere.",
-			timer: 3000,
-			timerProgressBar: true,
-			didOpen: () => {
-				Swal.showLoading();
-			},
-			willClose: () => {
-				clearInterval(timerInterval);
-			},
-		}).then((result) => {
-			/* Read more about handling dismissals below */
-			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log("I was closed by the timer");
-			}
-		});
-
-		setImage(e.target.files[0]);
-	};
-
 	return (
 		<GeneralLayout>
 			<Container maxWidth='sm'>

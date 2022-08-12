@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { LoginScreen } from "../page/auth/LoginScreen";
 import { BlogScreen } from "../page/blog/BlogScreen";
 import { ContactScreen } from "../page/contact/ContactScreen";
@@ -46,7 +46,7 @@ export const PageRouter = () => {
 
 			<Route path='/search' element={<SearchScreen />} />
 
-			<Route path='/login' element={<LoginScreen />} />
+			<Route path='*' element={<Navigate to='/' />} />
 		</Routes>
 	);
 };

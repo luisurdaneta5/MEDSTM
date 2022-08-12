@@ -1,26 +1,26 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { DashboardRouter } from "./DashboardRouter";
+import React, { useEffect } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+// import { DashboardRouter } from "./DashboardRouter";
 import { PageRouter } from "./PageRouter";
-import { PrivateRoute } from "./PrivateRoute";
 import { ProfileRouter } from "./ProfileRouter";
+import { useDispatch, useSelector } from "react-redux";
+import { CheckToken } from "../store/slices/auth";
+import { PrivateRoute } from "./PrivateRoute";
+// import { PrivateRoute } from "./PrivateRoute";
 
 export const AppRouter = () => {
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(CheckToken());
+	}, [dispatch]);
+
 	return (
 		<Routes>
-			<Route path='*' element={<PageRouter />} />
+			<Route path='/*' element={<PageRouter />} />
 
 			<Route
-				path='/dashboard/*'
-				element={
-					<PrivateRoute>
-						<DashboardRouter />
-					</PrivateRoute>
-				}
-			/>
-
-			<Route
-				path='/dashboard/profile/*'
+				path='/profile/*'
 				element={
 					<PrivateRoute>
 						<ProfileRouter />

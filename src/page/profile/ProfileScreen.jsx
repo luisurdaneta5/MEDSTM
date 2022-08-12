@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { GeneralLayout } from "../../layouts/GeneralLayout";
 import {
 	Box,
@@ -18,13 +18,19 @@ import {
 	TextField,
 	IconButton,
 } from "@mui/material";
+import { Api } from "../../api";
 import usdt from "../../assets/usdt.png";
 import moment from "moment";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 export const ProfileScreen = () => {
-	const [image, setImage] = useState();
+	const { uid } = useSelector((state) => state.auth.user);
+	const [image, setImage] = useState("");
+
+	useEffect(() => {}, []);
 
 	function createData(name, lastname, plan, code) {
 		return { name, lastname, plan, code };
@@ -73,6 +79,21 @@ export const ProfileScreen = () => {
 
 	const handleChangeImage = (e) => {
 		let timerInterval;
+
+		const formData = new FormData();
+
+		formData.append("image", e.target.files[0]);
+		formData.append("uid", uid);
+		// formData.append("id", id);
+
+		Api.post("/user/upload/avatar", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		}).then((res) => {
+			console.log(res);
+		});
+
 		Swal.fire({
 			title: "Subiendo imagen",
 			html: "Por favor espere.",
@@ -87,11 +108,17 @@ export const ProfileScreen = () => {
 		}).then((result) => {
 			/* Read more about handling dismissals below */
 			if (result.dismiss === Swal.DismissReason.timer) {
-				console.log("I was closed by the timer");
+				toast.success("Su avatar ha sido actualizado", {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
 			}
 		});
-
-		setImage(e.target.files[0]);
 	};
 
 	return (
@@ -109,7 +136,7 @@ export const ProfileScreen = () => {
 							mt: 5,
 						}}
 					>
-						<Link to='/dashboard/profile/edit'>
+						<Link to='/profile/edit'>
 							<Box
 								sx={{
 									display: "flex",
@@ -158,6 +185,7 @@ export const ProfileScreen = () => {
 									<input
 										type='file'
 										className='dropzone'
+										name='image'
 										onChange={handleChangeImage}
 									/>
 								</Box>

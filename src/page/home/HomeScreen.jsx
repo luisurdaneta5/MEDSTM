@@ -43,7 +43,6 @@ export const HomeScreen = () => {
 			});
 	}, []);
 
-	console.log(specialities);
 	const navigate = useNavigate();
 
 	const [formValues, handleInputChange, reset] = useForm({
@@ -67,7 +66,6 @@ export const HomeScreen = () => {
 	const handleClearSearch = () => {
 		setIcon(false);
 		reset();
-		console.log("Busqueda reiniciada");
 	};
 
 	return (

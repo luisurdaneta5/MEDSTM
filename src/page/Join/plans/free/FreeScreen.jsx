@@ -21,18 +21,26 @@ import { Api } from "../../../../api";
 export const FreeScreen = () => {
 	const { user } = useParams();
 	const [plans, setPlans] = useState([]);
+	const [gratis, setGratis] = useState([]);
 
 	useEffect(() => {
-		Api.get("/plans")
-			.then((res) => {
-				setPlans(res.data.plans);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		const plans = async () => {
+			const response = await Api.get("/plans/free");
+			setPlans(response.data.plans);
+			setGratis(response.data.free);
+		};
+		plans();
 	}, []);
 
-	console.log(plans);
+	const amount = (price) => {
+		return Number.parseFloat(price).toFixed(2);
+	};
+
+	if (user === "professional-healthcare") {
+		var percentage = gratis.percentage_professional;
+	} else {
+		var percentage = gratis.percentage_promotor;
+	}
 
 	return (
 		<GeneralLayout>
@@ -265,332 +273,78 @@ export const FreeScreen = () => {
 													component='span'
 													sx={{ textAlign: "left" }}
 												>
-													Obtienes 0.21% de la
+													Obtienes {percentage}% de la
 													membresía de cada Invitado
 													Premium/VIP (esto incluye
 													Promotores y Profesionales
 													de la Salud). También
-													obtienes el 0.21% cada vez
-													que este/estos Invitados
-													Premium/VIP deseen renovar
-													su membresía (en caso de
-													requerirlo). Ejemplo. Si
-													invitas:
+													obtienes el {percentage}%
+													cada vez que este/estos
+													Invitados Premium/VIP deseen
+													renovar su membresía (en
+													caso de requerirlo).
+													Ejemplo. Si invitas:
 													<Typography component='ul'>
-														<Typography
-															component='li'
-															style={{
-																color: "#000080",
-															}}
-														>
-															{" "}
-															Miembro{" "}
-															<strong>
-																Básico
-															</strong>{" "}
-															Profesional
-															Sanitario ={" "}
-															<strong>
+														{plans.map((plan) => (
+															<Typography
+																key={plan.id}
+																component='li'
+																style={{
+																	color: `${plan.color}`,
+																}}
+															>
 																{" "}
-																$0.11 Tether
-																USDT
-															</strong>{" "}
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#800000",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Bronce{" "}
-															</strong>
-															Profesional
-															Sanitario =
-															<strong>
-																{" "}
-																$0.30 Tether
-																USDT{" "}
-															</strong>
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#333333",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Plata{" "}
-															</strong>
-															Profesional
-															Sanitario ={" "}
-															<strong>
-																{" "}
-																$0.57 Tether
-																USDT{" "}
-															</strong>
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#ff9900",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Oro{" "}
-															</strong>
-															Profesional
-															Sanitario ={" "}
-															<strong>
-																{" "}
-																$1.07 Tether
-																USDT{" "}
-															</strong>
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#800080",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Zafiro{" "}
-															</strong>
-															Profesional
-															Sanitario =
-															<strong>
-																{" "}
-																$4.20 Tether
-																USDT{" "}
-															</strong>
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#ff0000",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Rubí{" "}
-															</strong>
-															Profesional
-															Sanitario =
-															<strong>
-																{" "}
-																$10.50 Tether
-																USDT
-															</strong>
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#0080000",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Esmeralda{" "}
-															</strong>
-															Profesional
-															Sanitario =
-															<strong>
-																{" "}
-																$21.00 Tether
-																USDT{" "}
-															</strong>
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#ff00ff",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Diamante{" "}
-															</strong>
-															Profesional
-															Sanitario =
-															<strong>
-																{" "}
-																$42.00 Tether
-																USDT
-															</strong>
-														</Typography>
+																Miembro{" "}
+																<strong>
+																	{plan.name}
+																</strong>{" "}
+																Profesional
+																Sanitario ={" "}
+																<strong>
+																	{" "}
+																	$
+																	{amount(
+																		(plan.price_professional *
+																			percentage) /
+																			100
+																	)}{" "}
+																	Tether USDT
+																</strong>{" "}
+																(por
+																ingreso/renovación)
+															</Typography>
+														))}
 
 														{/* promotor */}
-														<Typography
-															component='li'
-															style={{
-																color: "#000080",
-															}}
-														>
-															{" "}
-															Miembro{" "}
-															<strong>
-																Básico
-															</strong>{" "}
-															Promotor de Ventas ={" "}
-															<strong>
+														{plans.map((plan) => (
+															<Typography
+																key={plan.id}
+																component='li'
+																style={{
+																	color: `${plan.color}`,
+																}}
+															>
 																{" "}
-																$0.02 Tether
-																USDT
-															</strong>{" "}
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#800000",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Bronce{" "}
-															</strong>
-															Promotor de Ventas =
-															<strong>
-																{" "}
-																$0.05 Tether
-																USDT{" "}
-															</strong>
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#333333",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Plata{" "}
-															</strong>
-															Promotor de Ventas ={" "}
-															<strong>
-																{" "}
-																$0.09 Tether
-																USDT{" "}
-															</strong>
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#ff9900",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Oro{" "}
-															</strong>
-															Promotor de Ventas ={" "}
-															<strong>
-																{" "}
-																$0.16 Tether
-																USDT{" "}
-															</strong>
-															(por
-															ingreso/renovación)
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#800080",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Zafiro{" "}
-															</strong>
-															Promotor de Ventas =
-															<strong>
-																{" "}
-																$0.80 Tether
-																USDT{" "}
-															</strong>
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#ff0000",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Rubí{" "}
-															</strong>
-															Promotor de Ventas =
-															<strong>
-																{" "}
-																$2.00 Tether
-																USDT
-															</strong>
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#0080000",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Esmeralda{" "}
-															</strong>
-															Promotor de Ventas =
-															<strong>
-																{" "}
-																$4.00 Tether
-																USDT{" "}
-															</strong>
-														</Typography>
-														<Typography
-															component='li'
-															style={{
-																color: "#ff00ff",
-															}}
-														>
-															Miembro
-															<strong>
-																{" "}
-																Diamante{" "}
-															</strong>
-															Promotor de Ventas =
-															<strong>
-																{" "}
-																$8.00 Tether
-																USDT
-															</strong>
-														</Typography>
+																Miembro{" "}
+																<strong>
+																	{plan.name}
+																</strong>{" "}
+																Promotor de
+																Ventas ={" "}
+																<strong>
+																	{" "}
+																	$
+																	{amount(
+																		(plan.price_promotor *
+																			percentage) /
+																			100
+																	)}{" "}
+																	Tether USDT
+																</strong>{" "}
+																(por
+																ingreso/renovación)
+															</Typography>
+														))}
 													</Typography>
 												</Typography>
 											</AccordionDetails>

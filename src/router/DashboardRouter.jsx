@@ -19,11 +19,9 @@ export const DashboardRouter = () => {
 			<Route path='/meds' element={<MedsScreen />} />
 			<Route path='/promoters' element={<PromoterScreen />} />
 			<Route path='/requests' element={<RequestScreen />} />
-
 			<Route path='/blogs' element={<BlogScreen />} />
 			<Route path='/blog/create' element={<BlogCreateScreen />} />
 			<Route path='/blog/edit/:id' element={<BlogEditScreen />} />
-
 			<Route path='/speciality' element={<SpecialityScreen />} />
 			<Route
 				path='/speciality/create'
@@ -33,7 +31,6 @@ export const DashboardRouter = () => {
 				path='/speciality/edit/:id'
 				element={<SpecialityEditScreen />}
 			/>
-
 			<Route path='/withdrawals' element={<WithdraScreen />} />
 			<Route path='/user/profile/:id' element={<ProfileScreen />} />
 		</Routes>
