@@ -38,7 +38,8 @@ export const RegisterScreen = () => {
 	const dispatch = useDispatch();
 
 	const [formValues, handleInputChange] = useForm(initialState);
-	const { firstName, lastName, email, city, province, phone } = formValues;
+	const { firstName, lastName, email, city, province, phone, code } =
+		formValues;
 
 	const [country_value, setCountry_value] = useState({
 		country: "",
@@ -97,6 +98,7 @@ export const RegisterScreen = () => {
 							province,
 							country_code,
 							phone,
+							code,
 							file1,
 							file2
 						)
@@ -113,7 +115,8 @@ export const RegisterScreen = () => {
 						city,
 						province,
 						country_code,
-						phone
+						phone,
+						code
 					)
 				);
 			}
@@ -323,22 +326,40 @@ export const RegisterScreen = () => {
 								<Box
 									sx={{
 										display: "flex",
-										alignItems: "center",
-										textAlign: "center",
+										justifyContent: "space-between",
 									}}
 								>
-									<Checkbox
-										checked={checked}
-										onChange={handleCheckBoxChange}
-										name='terms'
-									/>
+									<Box
+										sx={{
+											display: "flex",
+											alignItems: "center",
+											textAlign: "center",
+										}}
+									>
+										<Checkbox
+											checked={checked}
+											onChange={handleCheckBoxChange}
+											name='terms'
+										/>
 
-									<Typography sx={{ fontSize: 15 }}>
-										Acepto los terminos y condiciones{" "}
-										<span style={{ color: "red" }}>
-											(*)
-										</span>
-									</Typography>
+										<Typography sx={{ fontSize: 15 }}>
+											Acepto los terminos y condiciones{" "}
+											<span style={{ color: "red" }}>
+												(*)
+											</span>
+										</Typography>
+									</Box>
+									<Grid item lg={2} sx={{ mt: 1 }}>
+										<TextField
+											id=''
+											label='Codigo de Referido'
+											value={code}
+											name='code'
+											size='small'
+											placeholder=''
+											onChange={handleInputChange}
+										/>
+									</Grid>
 								</Box>
 							</Grid>
 						</Grid>

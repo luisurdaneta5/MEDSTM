@@ -3,9 +3,11 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // import { DashboardRouter } from "./DashboardRouter";
 import { PageRouter } from "./PageRouter";
 import { ProfileRouter } from "./ProfileRouter";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { CheckToken } from "../store/slices/auth";
 import { PrivateRoute } from "./PrivateRoute";
+import { DashboardRouter } from "./DashboardRouter";
+import { PrivateRouteDashboard } from "./PrivateRouteDashboard";
 // import { PrivateRoute } from "./PrivateRoute";
 
 export const AppRouter = () => {
@@ -25,6 +27,15 @@ export const AppRouter = () => {
 					<PrivateRoute>
 						<ProfileRouter />
 					</PrivateRoute>
+				}
+			/>
+
+			<Route
+				path='/dashboard/*'
+				element={
+					<PrivateRouteDashboard>
+						<DashboardRouter />
+					</PrivateRouteDashboard>
 				}
 			/>
 		</Routes>

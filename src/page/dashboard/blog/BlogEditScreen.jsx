@@ -174,13 +174,7 @@ export const BlogEditScreen = () => {
 								<Box component='p' className='div-text'>
 									Click para cambiar la imagen
 								</Box>
-								<img
-									src={
-										"https://medstmsaludesvida.com/wp-content/uploads/2022/05/MEDS-TM-Administradores.png"
-									}
-									width='100%'
-									alt='medstm'
-								/>
+								<img src={image} width='100%' alt='medstm' />
 							</Box>
 						)}
 					</Box>

@@ -33,7 +33,7 @@ export const ProfileScreen = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const [user, setUser] = useState({
-		Referrals: [],
+		referrals: [],
 	});
 
 	const {
@@ -43,8 +43,8 @@ export const ProfileScreen = () => {
 		email,
 		phone,
 		status,
-		Documents,
-		Referrals,
+		documents,
+		referrals,
 		date_request,
 	} = user;
 
@@ -65,7 +65,7 @@ export const ProfileScreen = () => {
 		return { name, lastname, plan, code };
 	}
 
-	const refers = Referrals.map((referral) => {
+	const refers = referrals.map((referral) => {
 		return createData(
 			referral.User.name,
 			referral.User.lastname,
@@ -262,8 +262,8 @@ export const ProfileScreen = () => {
 							</Box>
 						</Grid>
 
-						{Documents &&
-							Documents.map((document) => (
+						{documents &&
+							documents.map((document) => (
 								<Grid item xs={6} key={document.id}>
 									<Box>
 										<Typography
@@ -283,7 +283,6 @@ export const ProfileScreen = () => {
 											startIcon={<DownloadIcon />}
 											component='a'
 											href={document.url}
-											download
 											target='_blank'
 										>
 											Descargar

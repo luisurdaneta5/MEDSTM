@@ -54,13 +54,6 @@ export const GeneralLayout = ({ children }) => {
 
 	const navigate = useNavigate();
 
-	// useEffect(() => {
-	// 	console.log("Entro en el Effect", isAuthenticated);
-	// 	if (isAuthenticated) {
-	// 		navigate("/profile");
-	// 	}
-	// }, [isAuthenticated]);
-
 	const [open, setOpen] = useState(false);
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
@@ -104,6 +97,7 @@ export const GeneralLayout = ({ children }) => {
 	const handleLogout = () => {
 		localStorage.clear();
 		dispatch(setLogout());
+		navigate("/", { replace: true });
 	};
 
 	return (

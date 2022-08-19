@@ -10,6 +10,7 @@ export const setLogin = (email, password, eventSuccessLogin = () => {}) => {
 			const res = await Api.post("/auth/login", { email, password });
 
 			localStorage.setItem("token", res.data.token);
+			localStorage.setItem("id", res.data.id);
 			localStorage.setItem("type", res.data.type);
 			localStorage.setItem("token-init-date", new Date().getTime());
 

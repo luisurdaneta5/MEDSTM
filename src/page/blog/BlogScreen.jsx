@@ -12,8 +12,6 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import administadores from "../../assets/administradores.png";
-
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getNoticesData } from "../../store/slices/ui";
@@ -47,7 +45,7 @@ export const BlogScreen = () => {
 									<Grid item lg={4}>
 										<Box>
 											<img
-												src={administadores}
+												src={notice.image}
 												alt='binance'
 												width='100%'
 												style={{ borderRadius: "5px" }}

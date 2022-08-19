@@ -25,57 +25,56 @@ import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { ReferralsTable } from "./components/ReferralsTable";
+import { SpecialitiesTable } from "./components/SpecialitiesTable";
+import { AddressTable } from "./components/AddressTable";
+import { WithdrawalsTable } from "./components/WithdrawalsTable";
+import copy from "copy-to-clipboard";
 
 export const ProfileScreen = () => {
-	const { uid } = useSelector((state) => state.auth.user);
+	const uid = localStorage.getItem("id");
 	const [image, setImage] = useState("");
 
-	useEffect(() => {}, []);
+	const [user, setUser] = useState({
+		referrals: [],
+		my_specialities: [],
+		addresses: [],
+		withdrawals: [],
+		code: [],
+	});
 
-	function createData(name, lastname, plan, code) {
-		return { name, lastname, plan, code };
-	}
+	const [balance, setBalance] = useState(0);
 
-	// const refers = Referrals.map((referral) => {
-	// 	return createData(
-	// 		referral.User.name,
-	// 		referral.User.lastname,
-	// 		referral.User.plan,
-	// 		"12345"
-	// 	);
-	// });
+	useEffect(() => {
+		Api.get("/user/profile", {
+			params: {
+				id: uid,
+			},
+		})
+			.then((res) => {
+				setUser(res.data.user);
+				setImage(res.data.avatar);
+				setBalance(res.data.user.balance.balance);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
 
-	const refers = [
-		createData("John", "Doe", "Gratis", "3.5$"),
-		createData("John", "Doe", "Basic", "12345"),
-		createData("John", "Doe", "Diamante", "12345"),
-		createData("John", "Doe", "Esmeralda", "12345"),
-		createData("John", "Doe", "Oro", "12345"),
-	];
-
-	const [rowsPerPageRefer, setRowsPerPageRefer] = useState(5);
-	const [pageRefer, setPageRefer] = useState(0);
-
-	const handleChangePageRefer = (e, newPage) => {
-		setPageRefer(newPage);
-	};
-
-	const handleChangeRowsPerPageRefer = (e) => {
-		setRowsPerPageRefer(parseInt(e.target.value, 10));
-		setPageRefer(0);
-	};
-
-	const [rowsPerPageSpeciality, setRowsPerPageSpeciality] = useState(5);
-	const [pageSpeciality, setPageSpeciality] = useState(0);
-
-	const handleChangePageSpeciality = (e, newPage) => {
-		setPageSpeciality(newPage);
-	};
-
-	const handleChangeRowsPerPageSpeciality = (e) => {
-		setRowsPerPageSpeciality(parseInt(e.target.value, 10));
-		setPageSpeciality(0);
-	};
+	const {
+		name,
+		lastname,
+		email,
+		phone,
+		country,
+		plan,
+		my_specialities,
+		referrals,
+		addresses,
+		withdrawals,
+		createdAt,
+		code,
+	} = user;
 
 	const handleChangeImage = (e) => {
 		let timerInterval;
@@ -84,7 +83,7 @@ export const ProfileScreen = () => {
 
 		formData.append("image", e.target.files[0]);
 		formData.append("uid", uid);
-		// formData.append("id", id);
+		formData.append("id", image.id);
 
 		Api.post("/user/upload/avatar", formData, {
 			headers: {
@@ -118,6 +117,20 @@ export const ProfileScreen = () => {
 					progress: undefined,
 				});
 			}
+		});
+	};
+
+	const handleCopy = () => {
+		const code = document.getElementById("codeReferral").value;
+		copy(code);
+		toast.success("Codigo Copiado", {
+			position: "top-right",
+			autoClose: 5000,
+			hideProgressBar: false,
+			closeOnClick: true,
+			pauseOnHover: true,
+			draggable: true,
+			progress: undefined,
 		});
 	};
 
@@ -165,11 +178,13 @@ export const ProfileScreen = () => {
 							}}
 						>
 							<Avatar
-								alt='Luis Urdaneta'
-								src='static/images/avatars/luis.jpg'
+								alt={name}
+								src={image.url}
 								sx={{
 									width: "100px",
 									height: "100px",
+									border: "1px solid black",
+									borderRadius: "50%",
 								}}
 							/>
 							<Tooltip title='Cambiar imagen'>
@@ -279,7 +294,7 @@ export const ProfileScreen = () => {
 										Nombre:
 									</Typography>
 									<Typography color='initial'>
-										Luis Urdaneta
+										{name} {lastname}
 									</Typography>
 								</Box>
 
@@ -293,7 +308,9 @@ export const ProfileScreen = () => {
 										Fecha Ingreso:
 									</Typography>
 
-									<Typography>08/08/2000</Typography>
+									<Typography>
+										{moment(createdAt).format("DD/MM/YYYY")}
+									</Typography>
 								</Box>
 
 								<Box sx={{ mt: 3 }}>
@@ -306,9 +323,7 @@ export const ProfileScreen = () => {
 										Correo Electronico:
 									</Typography>
 
-									<Typography>
-										Luis.urdaneta488@yahoo.com.ve
-									</Typography>
+									<Typography>{email}</Typography>
 								</Box>
 							</Grid>
 
@@ -323,7 +338,7 @@ export const ProfileScreen = () => {
 										Telefono
 									</Typography>
 
-									<Typography>+5825625262</Typography>
+									<Typography>{phone}</Typography>
 								</Box>
 
 								<Box sx={{ mt: 3 }}>
@@ -336,7 +351,7 @@ export const ProfileScreen = () => {
 										Pais
 									</Typography>
 
-									<Typography>Venezuela</Typography>
+									<Typography>{country}</Typography>
 								</Box>
 							</Grid>
 							<Grid
@@ -357,7 +372,7 @@ export const ProfileScreen = () => {
 										Plan:
 									</Typography>
 									<Typography>
-										Gratis{" "}
+										{plan}{" "}
 										<Tooltip title='Gratis'>
 											<i
 												className='fa-solid fa-medal'
@@ -371,17 +386,20 @@ export const ProfileScreen = () => {
 									</Typography>
 								</Box>
 
-								<Box>
-									<Typography
-										sx={{
-											fontWeight: "bold",
-											fontSize: 13,
-										}}
-									>
-										Fecha Vencimiento:
-									</Typography>
-									<Typography>08/22/2020</Typography>
-								</Box>
+								{plan !== "Gratis" && (
+									<Box>
+										<Typography
+											sx={{
+												fontWeight: "bold",
+												fontSize: 13,
+											}}
+										>
+											Fecha Vencimiento:
+										</Typography>
+										<Typography>08/22/2020</Typography>
+									</Box>
+								)}
+
 								<Box sx={{ mt: 2 }}>
 									<Typography>
 										<Button
@@ -420,21 +438,23 @@ export const ProfileScreen = () => {
 											fontSize: 25,
 										}}
 									>
-										<span>$ 0.00</span>
+										<span>$ {balance.toFixed(2)}</span>
 										<img src={usdt} alt='usdt' width={30} />
 									</Typography>
 								</Box>
 
-								<Box sx={{ mt: 2 }}>
-									<Typography>
-										<Button
-											variant='contained'
-											size='small'
-										>
-											Solicitar Retiro
-										</Button>
-									</Typography>
-								</Box>
+								{balance != 0 && (
+									<Box sx={{ mt: 2 }}>
+										<Typography>
+											<Button
+												variant='contained'
+												size='small'
+											>
+												Solicitar Retiro
+											</Button>
+										</Typography>
+									</Box>
+								)}
 							</Grid>
 						</Grid>
 					</Grid>
@@ -442,285 +462,39 @@ export const ProfileScreen = () => {
 					<Grid item xs={6}>
 						<Grid container spacing={2} sx={{ mt: 1 }}>
 							<Grid item xs={9}>
+								<Typography color='primary'>
+									CODIGO REFERIDO
+								</Typography>
+
 								<TextField
-									id=''
+									id='codeReferral'
 									label=''
-									value='Codigo de referido'
+									value={code.code}
 									size='small'
 									disabled
 									fullWidth
 								/>
 							</Grid>
-							<Grid item xs={3}>
-								<Button variant='contained' fullWidth>
+							<Grid
+								item
+								xs={3}
+								sx={{
+									mt: 3,
+								}}
+							>
+								<Button
+									variant='contained'
+									fullWidth
+									onClick={handleCopy}
+								>
 									Copiar
 								</Button>
 							</Grid>
 						</Grid>
-						<Box
-							sx={{
-								display: "flex",
 
-								mt: 2,
-							}}
-						>
-							<Typography color='primary'>
-								MIS REFERIDOS
-							</Typography>
-						</Box>
-						<TableContainer
-							sx={{ mt: 1, border: "1px solid black" }}
-						>
-							<Table size='small'>
-								<TableHead>
-									<TableRow>
-										<TableCell align='left'>
-											Referido
-										</TableCell>
-										<TableCell align='left'>Plan</TableCell>
-										<TableCell align='left'>%</TableCell>
-									</TableRow>
-								</TableHead>
+						<ReferralsTable referrals={referrals} />
 
-								<TableBody>
-									{refers >= 0 ? (
-										<TableRow>
-											<TableCell
-												colSpan={3}
-												align='center'
-											>
-												Este usuario no posee Referidos
-											</TableCell>
-										</TableRow>
-									) : (
-										refers.map((refer, index) => (
-											<TableRow key={index}>
-												<TableCell align='left'>
-													{refer.name}{" "}
-													{refer.lastname}
-												</TableCell>
-												<TableCell align='left'>
-													{refer.plan ===
-														"Gratis" && (
-														<Tooltip title='Gratis'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "green",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Basic" && (
-														<Tooltip title='Basica'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#000080",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Bronce" && (
-														<Tooltip title='Bronce'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#800000",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Plata" && (
-														<Tooltip title='Plata'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#333333",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Oro" && (
-														<Tooltip title='Oro'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#ff9900",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Zafiro" && (
-														<Tooltip title='Zafiro'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#800080",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Rubi" && (
-														<Tooltip title='Rubi'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#ff0000",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Esmeralda" && (
-														<Tooltip title='Esmeralda'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#008000",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Diamante" && (
-														<Tooltip title='Diamante'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#ff00ff",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-												</TableCell>
-												<TableCell align='left'>
-													{refer.code}
-												</TableCell>
-											</TableRow>
-										))
-									)}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5]}
-							component='div'
-							count={refers.length}
-							rowsPerPage={rowsPerPageRefer}
-							page={pageRefer}
-							onPageChange={handleChangePageRefer}
-							onRowsPerPageChange={handleChangeRowsPerPageRefer}
-							labelDisplayedRows={({ from, to, count }) => {
-								return "" + from + "-" + to + " a " + count;
-							}}
-							labelRowsPerPage='Filas por página'
-						/>
-
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-between",
-								mt: 1,
-							}}
-						>
-							<Typography color='primary'>
-								ESPECIALIDADES
-							</Typography>
-							<Button variant='contained' size='small'>
-								Agregar Especialidad
-							</Button>
-						</Box>
-						<TableContainer
-							sx={{ mt: 1, border: "1px solid black" }}
-						>
-							<Table size='small'>
-								<TableHead>
-									<TableRow>
-										<TableCell align='left'>
-											Especialidades
-										</TableCell>
-										<TableCell align='left'></TableCell>
-									</TableRow>
-								</TableHead>
-
-								<TableBody>
-									{refers >= 0 ? (
-										<TableRow>
-											<TableCell
-												colSpan={3}
-												align='center'
-											>
-												Este usuario no posee
-												Especialidades
-											</TableCell>
-										</TableRow>
-									) : (
-										refers.map((refer, index) => (
-											<TableRow key={index}>
-												<TableCell align='left'>
-													{refer.name}{" "}
-													{refer.lastname}
-												</TableCell>
-
-												<TableCell align='right'>
-													<Button
-														variant='contained'
-														size='small'
-														color='error'
-													>
-														<i className='fas fa-trash'></i>
-													</Button>
-												</TableCell>
-											</TableRow>
-										))
-									)}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5]}
-							component='div'
-							count={refers.length}
-							rowsPerPage={rowsPerPageSpeciality}
-							page={pageSpeciality}
-							onPageChange={handleChangePageSpeciality}
-							onRowsPerPageChange={
-								handleChangeRowsPerPageSpeciality
-							}
-							labelDisplayedRows={({ from, to, count }) => {
-								return "" + from + "-" + to + " a " + count;
-							}}
-							labelRowsPerPage='Filas por página'
-						/>
+						<SpecialitiesTable my_specialities={my_specialities} />
 					</Grid>
 					<Grid item xs={6}>
 						<Box
@@ -732,182 +506,7 @@ export const ProfileScreen = () => {
 						>
 							<Typography color='primary'>MIS RETIROS</Typography>
 						</Box>
-						<TableContainer
-							sx={{ mt: 1, border: "1px solid black" }}
-						>
-							<Table size='small'>
-								<TableHead>
-									<TableRow>
-										<TableCell align='left'>
-											Referido
-										</TableCell>
-										<TableCell align='left'>Plan</TableCell>
-										<TableCell align='left'>%</TableCell>
-									</TableRow>
-								</TableHead>
-
-								<TableBody>
-									{refers >= 0 ? (
-										<TableRow>
-											<TableCell
-												colSpan={3}
-												align='center'
-											>
-												Este usuario no posee Referidos
-											</TableCell>
-										</TableRow>
-									) : (
-										refers.map((refer, index) => (
-											<TableRow key={index}>
-												<TableCell align='left'>
-													{refer.name}{" "}
-													{refer.lastname}
-												</TableCell>
-												<TableCell align='left'>
-													{refer.plan ===
-														"Gratis" && (
-														<Tooltip title='Gratis'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "green",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Basic" && (
-														<Tooltip title='Basica'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#000080",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Bronce" && (
-														<Tooltip title='Bronce'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#800000",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Plata" && (
-														<Tooltip title='Plata'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#333333",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Oro" && (
-														<Tooltip title='Oro'>
-															<i
-																className='fa-solid fa-medal'
-																style={{
-																	fontSize: 18,
-																	color: "#ff9900",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Zafiro" && (
-														<Tooltip title='Zafiro'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#800080",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan === "Rubi" && (
-														<Tooltip title='Rubi'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#ff0000",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Esmeralda" && (
-														<Tooltip title='Esmeralda'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#008000",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-
-													{refer.plan ===
-														"Diamante" && (
-														<Tooltip title='Diamante'>
-															<i
-																className='fa-solid fa-gem'
-																style={{
-																	fontSize: 18,
-																	color: "#ff00ff",
-																	cursor: "pointer",
-																}}
-															></i>
-														</Tooltip>
-													)}
-												</TableCell>
-												<TableCell align='left'>
-													{refer.code}
-												</TableCell>
-											</TableRow>
-										))
-									)}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5]}
-							component='div'
-							count={refers.length}
-							rowsPerPage={rowsPerPageRefer}
-							page={pageRefer}
-							onPageChange={handleChangePageRefer}
-							onRowsPerPageChange={handleChangeRowsPerPageRefer}
-							labelDisplayedRows={({ from, to, count }) => {
-								return "" + from + "-" + to + " a " + count;
-							}}
-							labelRowsPerPage='Filas por página'
-						/>
+						<WithdrawalsTable withdrawals={withdrawals} />
 					</Grid>
 					<Grid item xs={6}>
 						<Box
@@ -924,64 +523,7 @@ export const ProfileScreen = () => {
 								Agregar Direccion
 							</Button>
 						</Box>
-						<TableContainer
-							sx={{ mt: 1, border: "1px solid black" }}
-						>
-							<Table size='small'>
-								<TableHead>
-									<TableRow>
-										<TableCell align='left'>
-											Direcciones
-										</TableCell>
-									</TableRow>
-								</TableHead>
-
-								<TableBody>
-									{refers >= 0 ? (
-										<TableRow>
-											<TableCell
-												colSpan={3}
-												align='center'
-											>
-												Este usuario no posee Referidos
-											</TableCell>
-										</TableRow>
-									) : (
-										refers.map((refer, index) => (
-											<TableRow key={index}>
-												<TableCell align='left'>
-													{refer.name}{" "}
-													{refer.lastname}
-												</TableCell>
-
-												<TableCell align='right'>
-													<Button
-														variant='contained'
-														size='small'
-														color='error'
-													>
-														<i className='fas fa-trash'></i>
-													</Button>
-												</TableCell>
-											</TableRow>
-										))
-									)}
-								</TableBody>
-							</Table>
-						</TableContainer>
-						<TablePagination
-							rowsPerPageOptions={[5]}
-							component='div'
-							count={refers.length}
-							rowsPerPage={rowsPerPageRefer}
-							page={pageRefer}
-							onPageChange={handleChangePageRefer}
-							onRowsPerPageChange={handleChangeRowsPerPageRefer}
-							labelDisplayedRows={({ from, to, count }) => {
-								return "" + from + "-" + to + " a " + count;
-							}}
-							labelRowsPerPage='Filas por página'
-						/>
+						<AddressTable addresse={addresses} />
 					</Grid>
 				</Grid>
 			</Container>

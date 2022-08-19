@@ -31,6 +31,8 @@ export const HomeScreen = () => {
 
 	const [specialities, setSpecialities] = useState([]);
 
+	console.log(specialities);
+
 	useEffect(() => {
 		dispatch(getCountriesData());
 
@@ -299,7 +301,7 @@ export const HomeScreen = () => {
 											}}
 										>
 											<img
-												src='https://bfesteticadental.com/wp-content/uploads/2017/06/Odontologia-Caracas-Venezuela-BF-Estetica-Dental-1024x682.jpg'
+												src={speciality.img}
 												alt={speciality.name}
 												width='260px'
 												height='163px'

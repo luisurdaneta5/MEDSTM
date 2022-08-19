@@ -11,6 +11,7 @@ export const setRegister = (
 	province,
 	country_code,
 	phone,
+	code,
 	file1,
 	file2
 ) => {
@@ -34,6 +35,7 @@ export const setRegister = (
 	formData.append("province", province);
 	formData.append("country_code", country_code);
 	formData.append("phone", phone);
+	formData.append("code", code);
 
 	return async () => {
 		try {
