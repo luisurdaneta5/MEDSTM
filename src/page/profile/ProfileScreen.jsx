@@ -509,20 +509,6 @@ export const ProfileScreen = () => {
 						<WithdrawalsTable withdrawals={withdrawals} />
 					</Grid>
 					<Grid item xs={6}>
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-between",
-								mt: 0,
-							}}
-						>
-							<Typography color='primary'>
-								MIS DIRECCIONES
-							</Typography>
-							<Button variant='contained' size='small'>
-								Agregar Direccion
-							</Button>
-						</Box>
 						<AddressTable addresse={addresses} />
 					</Grid>
 				</Grid>

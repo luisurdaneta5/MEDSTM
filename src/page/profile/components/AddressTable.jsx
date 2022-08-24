@@ -10,9 +10,29 @@ import {
 	TableRow,
 	Tooltip,
 	Button,
+	Modal,
+	Typography,
+	TextField,
 } from "@mui/material";
+import { useForm } from "../../../hooks/useForm";
+
+const style = {
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: 400,
+	bgcolor: "background.paper",
+	border: "2px solid #000",
+	boxShadow: 24,
+	p: 4,
+};
 
 export const AddressTable = ({ addresse }) => {
+	const [open, setOpen] = useState(false);
+	const [formValues, handleInputChange] = useForm();
+
+	const { address } = formValues;
 	function createData(name) {
 		return { name };
 	}
@@ -36,8 +56,71 @@ export const AddressTable = ({ addresse }) => {
 		setRowsPerPageRefer(parseInt(e.target.value, 10));
 		setPageRefer(0);
 	};
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		console.log("Aqui entro", address);
+	};
 	return (
 		<Box>
+			<Modal
+				open={open}
+				onClose={handleClose}
+				aria-labelledby='modal-modal-title'
+				aria-describedby='modal-modal-description'
+			>
+				<form onSubmit={handleSubmit}>
+					<Box sx={style}>
+						<TextField
+							id=''
+							label=''
+							value={address}
+							onChange={handleInputChange}
+							name='address'
+							placeholder='Ingrese Direccion'
+							size='small'
+							fullWidth
+						/>
+						<Box
+							sx={{
+								display: "flex",
+								mt: 2,
+								justifyContent: "flex-end",
+							}}
+						>
+							<Button
+								variant='contained'
+								color='primary'
+								size='small'
+								type='submit'
+							>
+								agregar
+							</Button>
+						</Box>
+					</Box>
+				</form>
+			</Modal>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+					mt: 0,
+				}}
+			>
+				<Typography color='primary'>MIS DIRECCIONES</Typography>
+				<Button variant='contained' size='small' onClick={handleOpen}>
+					Agregar Direccion
+				</Button>
+			</Box>
 			<TableContainer sx={{ mt: 1, border: "1px solid black" }}>
 				<Table size='small'>
 					<TableHead>
