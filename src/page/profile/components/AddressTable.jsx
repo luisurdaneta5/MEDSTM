@@ -15,6 +15,8 @@ import {
 	TextField,
 } from "@mui/material";
 import { useForm } from "../../../hooks/useForm";
+import Api from "../../../api/Api";
+import { toast } from "react-toastify";
 
 const style = {
 	position: "absolute",
@@ -29,6 +31,7 @@ const style = {
 };
 
 export const AddressTable = ({ addresse }) => {
+	const uid = localStorage.getItem("id");
 	const [open, setOpen] = useState(false);
 	const [formValues, handleInputChange] = useForm();
 
@@ -68,7 +71,34 @@ export const AddressTable = ({ addresse }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		console.log("Aqui entro", address);
+		if (!address) {
+			toast.error("Porfavor ingrese una Direccion Valida", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		} else {
+			Api.post("/address/create", { uid: uid, address: address })
+				.then((res) => {
+					setOpen(false);
+					toast.success(res.data.message, {
+						position: "top-right",
+						autoClose: 2000,
+						hideProgressBar: false,
+						closeOnClick: true,
+						pauseOnHover: true,
+						draggable: true,
+						progress: undefined,
+					});
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	};
 	return (
 		<Box>
