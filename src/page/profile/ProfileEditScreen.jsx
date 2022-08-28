@@ -7,12 +7,28 @@ import {
 	Typography,
 	Button,
 } from "@mui/material";
-import { useState } from "react";
-import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 import "./styles.css";
 import { Link } from "react-router-dom";
+import { Api } from "../../api";
+import { useSelector } from "react-redux";
 
 export const ProfileEditScreen = () => {
+	const id = localStorage.getItem("id");
+	const [data, setData] = useState([]);
+
+	const { name, lastname, phone, email } = data;
+
+	useEffect(() => {
+		Api.get("/user/profile", {
+			params: {
+				id,
+			},
+		})
+			.then((res) => setData(res.data.user))
+			.catch((err) => console.log(err));
+	}, []);
+
 	return (
 		<GeneralLayout>
 			<Container maxWidth='sm'>
@@ -51,21 +67,25 @@ export const ProfileEditScreen = () => {
 											fontSize: "15px",
 										}}
 									>
-										Luis Urdaneta
+										{name} {lastname}
 									</Typography>
 								</Box>
 								<Box>
-									<Button
-										variant='contained'
-										color='secondary'
-										sx={{
-											fontSize: "11px",
-											width: "20px",
-											color: "white",
-										}}
+									<Link
+										to={`/profile/edit/change_name/${name}/${lastname}/${id}`}
 									>
-										editar
-									</Button>
+										<Button
+											variant='contained'
+											color='secondary'
+											sx={{
+												fontSize: "11px",
+												width: "20px",
+												color: "white",
+											}}
+										>
+											editar
+										</Button>
+									</Link>
 								</Box>
 							</Box>
 						</Box>
@@ -100,21 +120,25 @@ export const ProfileEditScreen = () => {
 											fontSize: "15px",
 										}}
 									>
-										+5804127646787
+										{phone}
 									</Typography>
 								</Box>
 								<Box>
-									<Button
-										variant='contained'
-										color='secondary'
-										sx={{
-											fontSize: "11px",
-											width: "20px",
-											color: "white",
-										}}
+									<Link
+										to={`/profile/edit/change_phone/${phone}/${email}`}
 									>
-										editar
-									</Button>
+										<Button
+											variant='contained'
+											color='secondary'
+											sx={{
+												fontSize: "11px",
+												width: "20px",
+												color: "white",
+											}}
+										>
+											editar
+										</Button>
+									</Link>
 								</Box>
 							</Box>
 						</Box>
@@ -149,21 +173,25 @@ export const ProfileEditScreen = () => {
 											fontSize: "15px",
 										}}
 									>
-										luis.urdaneta488@gmail.com
+										{email}
 									</Typography>
 								</Box>
 								<Box>
-									<Button
-										variant='contained'
-										color='secondary'
-										sx={{
-											fontSize: "11px",
-											width: "20px",
-											color: "white",
-										}}
+									<Link
+										to={`/profile/edit/change_email/${email}/${id}`}
 									>
-										editar
-									</Button>
+										<Button
+											variant='contained'
+											color='secondary'
+											sx={{
+												fontSize: "11px",
+												width: "20px",
+												color: "white",
+											}}
+										>
+											editar
+										</Button>
+									</Link>
 								</Box>
 							</Box>
 						</Box>

@@ -21,6 +21,7 @@ import {
 import { useEffect } from "react";
 import { Api } from "../../../api";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 const style = {
 	position: "absolute",
@@ -55,12 +56,12 @@ export const SpecialitiesTable = ({ my_specialities }) => {
 		setSpeciality(event.target.value);
 	};
 
-	function createData(name) {
-		return { name };
+	function createData(id, name) {
+		return { id, name };
 	}
 
 	const specialities = my_specialities.map((speciality) =>
-		createData(speciality.speciality)
+		createData(speciality.id, speciality.speciality)
 	);
 
 	const [rowsPerPageSpeciality, setRowsPerPageSpeciality] = useState(5);
@@ -81,6 +82,35 @@ export const SpecialitiesTable = ({ my_specialities }) => {
 
 	const handleClose = () => {
 		setOpen(false);
+	};
+
+	const handleDelete = (id) => {
+		Swal.fire({
+			title: "Estas seguro?",
+
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#018f98",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Si, borrarla!",
+		}).then((result) => {
+			if (result.value) {
+				Api.delete(`/specialities/deleteSpecialityUser`, {
+					params: {
+						uid: uid,
+						id,
+					},
+				})
+					.then((res) => {
+						toast.success(res.data.message);
+
+						window.location.reload();
+					})
+					.catch((err) => {
+						toast.error(err.response.data.message);
+					});
+			}
+		});
 	};
 
 	const handleSubmit = (e) => {
@@ -203,6 +233,9 @@ export const SpecialitiesTable = ({ my_specialities }) => {
 											variant='contained'
 											size='small'
 											color='error'
+											onClick={() =>
+												handleDelete(speciality.id)
+											}
 										>
 											<i className='fas fa-trash'></i>
 										</Button>

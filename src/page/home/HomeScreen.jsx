@@ -31,8 +31,6 @@ export const HomeScreen = () => {
 
 	const [specialities, setSpecialities] = useState([]);
 
-	console.log(specialities);
-
 	useEffect(() => {
 		dispatch(getCountriesData());
 
