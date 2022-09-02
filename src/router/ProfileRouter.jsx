@@ -3,7 +3,9 @@ import { ProfileEditScreen } from "../page/profile/ProfileEditScreen";
 import { ProfileScreen } from "../page/profile/ProfileScreen";
 import { ChangeEmailScreen } from "../page/profile/sections_edit/ChangeEmailScreen";
 import { ChangeNameScreen } from "../page/profile/sections_edit/ChangeNameScreen";
+import { ChangePasswordScreen } from "../page/profile/sections_edit/ChangePasswordScreen";
 import { ChangePhoneScreen } from "../page/profile/sections_edit/ChangePhoneScreen";
+import { SocialNetworkScreen } from "../page/profile/sections_edit/SocialNetworkScreen";
 
 export const ProfileRouter = () => {
 	return (
@@ -21,6 +23,16 @@ export const ProfileRouter = () => {
 			<Route
 				path='/edit/change_email/:email/:id'
 				element={<ChangeEmailScreen />}
+			/>
+
+			<Route
+				path='/edit/change_password/:id'
+				element={<ChangePasswordScreen />}
+			/>
+
+			<Route
+				path='/edit/social_networks/:id'
+				element={<SocialNetworkScreen />}
 			/>
 		</Routes>
 	);

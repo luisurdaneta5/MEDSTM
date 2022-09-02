@@ -230,17 +230,21 @@ export const ProfileEditScreen = () => {
 									</Typography>
 								</Box>
 								<Box>
-									<Button
-										variant='contained'
-										color='secondary'
-										sx={{
-											fontSize: "11px",
-											width: "20px",
-											color: "white",
-										}}
+									<Link
+										to={`/profile/edit/change_password/${id}`}
 									>
-										editar
-									</Button>
+										<Button
+											variant='contained'
+											color='secondary'
+											sx={{
+												fontSize: "11px",
+												width: "20px",
+												color: "white",
+											}}
+										>
+											editar
+										</Button>
+									</Link>
 								</Box>
 							</Box>
 						</Box>
@@ -281,17 +285,21 @@ export const ProfileEditScreen = () => {
 									</Typography>
 								</Box>
 								<Box>
-									<Button
-										variant='contained'
-										color='secondary'
-										sx={{
-											fontSize: "11px",
-											width: "20px",
-											color: "white",
-										}}
+									<Link
+										to={`/profile/edit/social_networks/${id}`}
 									>
-										editar
-									</Button>
+										<Button
+											variant='contained'
+											color='secondary'
+											sx={{
+												fontSize: "11px",
+												width: "20px",
+												color: "white",
+											}}
+										>
+											editar
+										</Button>
+									</Link>
 								</Box>
 							</Box>
 						</Box>

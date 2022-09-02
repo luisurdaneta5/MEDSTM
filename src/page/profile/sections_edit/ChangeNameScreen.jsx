@@ -56,26 +56,56 @@ export const ChangeNameScreen = () => {
 										cuando hayas terminado.
 									</Typography>
 								</Box>
-								<Box
-									sx={{
-										mt: 2,
-									}}
-								>
-									<Typography
-										sx={{
-											fontSize: "15px",
-											fontWeight: "bold",
-										}}
-									>
-										Nuevo Nombre
-									</Typography>
-									<TextField
-										id=''
-										label=''
-										value={name + "" + lastname}
-										size='small'
-									/>
-								</Box>
+
+								<Grid container spacing={2}>
+									<Grid item lg={6}>
+										<Box
+											sx={{
+												mt: 2,
+											}}
+										>
+											<Typography
+												sx={{
+													fontSize: "15px",
+													fontWeight: "bold",
+												}}
+											>
+												Nombre:
+											</Typography>
+											<TextField
+												id=''
+												label=''
+												value={name}
+												size='small'
+												fullWidth
+											/>
+										</Box>
+									</Grid>
+									<Grid item lg={6}>
+										<Box
+											sx={{
+												mt: 2,
+											}}
+										>
+											<Typography
+												sx={{
+													fontSize: "15px",
+													fontWeight: "bold",
+												}}
+											>
+												Apellido:
+											</Typography>
+											<TextField
+												id=''
+												label=''
+												value={lastname}
+												size='small'
+												fullWidth
+											/>
+										</Box>
+									</Grid>
+								</Grid>
+
 								<Box
 									sx={{
 										mt: 3,
