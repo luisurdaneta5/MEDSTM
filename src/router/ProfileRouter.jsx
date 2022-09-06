@@ -13,7 +13,7 @@ export const ProfileRouter = () => {
 			<Route path='/' element={<ProfileScreen />} />
 			<Route path='/edit' element={<ProfileEditScreen />} />
 			<Route
-				path='/edit/change_name/:name/:lastname/:id'
+				path='/edit/change_name/:n/:lname/:id'
 				element={<ChangeNameScreen />}
 			/>
 			<Route
