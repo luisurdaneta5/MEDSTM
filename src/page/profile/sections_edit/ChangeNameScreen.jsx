@@ -8,12 +8,14 @@ import {
 } from "@mui/material";
 
 import "../styles.css";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { GeneralLayout } from "../../../layouts/GeneralLayout";
 import { useForm } from "../../../hooks/useForm";
 import { Api } from "../../../api";
+import { toast } from "react-toastify";
 
 export const ChangeNameScreen = () => {
+	const navigate = useNavigate();
 	const { n, lname, id } = useParams();
 
 	const [formValues, handleInputChange] = useForm({
@@ -31,7 +33,19 @@ export const ChangeNameScreen = () => {
 			name: name,
 			lastname: lastname,
 		})
-			.then((res) => console.log(res))
+			.then((res) => {
+				toast.success(res.data.message, {
+					position: "top-right",
+					autoClose: 5000,
+					hideProgressBar: false,
+					closeOnClick: true,
+					pauseOnHover: true,
+					draggable: true,
+					progress: undefined,
+				});
+
+				navigate("/profile/edit");
+			})
 			.catch((err) => console.log(err));
 	};
 

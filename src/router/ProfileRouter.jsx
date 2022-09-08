@@ -17,7 +17,7 @@ export const ProfileRouter = () => {
 				element={<ChangeNameScreen />}
 			/>
 			<Route
-				path='/edit/change_phone/:phone/:id'
+				path='/edit/change_phone/:p/:id'
 				element={<ChangePhoneScreen />}
 			/>
 			<Route
