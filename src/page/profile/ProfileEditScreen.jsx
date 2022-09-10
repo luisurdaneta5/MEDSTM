@@ -125,7 +125,7 @@ export const ProfileEditScreen = () => {
 								</Box>
 								<Box>
 									<Link
-										to={`/profile/edit/change_phone/${phone}/${email}`}
+										to={`/profile/edit/change_phone/${phone}/${id}`}
 									>
 										<Button
 											variant='contained'
