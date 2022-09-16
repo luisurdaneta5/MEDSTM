@@ -34,6 +34,7 @@ import copy from "copy-to-clipboard";
 export const ProfileScreen = () => {
 	const uid = localStorage.getItem("id");
 	const [image, setImage] = useState("");
+	const [social, setSocial] = useState([]);
 
 	const [user, setUser] = useState({
 		referrals: [],
@@ -60,6 +61,16 @@ export const ProfileScreen = () => {
 				console.log(err);
 			});
 	}, []);
+
+	useEffect(() => {
+		Api.get("/social/getSocial", {
+			params: {
+				id: uid,
+			},
+		}).then((res) => setSocial(res.data.data));
+	}, []);
+
+	const { facebook, instagram, twitter, linkedin } = social;
 
 	const {
 		name,
@@ -217,24 +228,27 @@ export const ProfileScreen = () => {
 							}}
 						>
 							<Box>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "transparent",
-											background:
-												"-webkit-radial-gradient(30% 107%, circle, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);",
-											backgroundClip: "text",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-instagram'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
+								{instagram != null && (
+									<IconButton
+										component='a'
+										href={instagram}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "transparent",
+												background:
+													"-webkit-radial-gradient(30% 107%, circle, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);",
+												backgroundClip: "text",
+											},
+										}}
+									>
+										<i
+											className='fa-brands fa-instagram'
+											style={{ fontSize: 25 }}
+										></i>
+									</IconButton>
+								)}
+
 								<IconButton
 									component='a'
 									href='http://facebook.com/'
