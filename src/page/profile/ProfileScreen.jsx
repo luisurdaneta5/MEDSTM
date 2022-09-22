@@ -85,6 +85,7 @@ export const ProfileScreen = () => {
 		withdrawals,
 		createdAt,
 		code,
+		type,
 	} = user;
 
 	const handleChangeImage = (e) => {
@@ -249,51 +250,59 @@ export const ProfileScreen = () => {
 									</IconButton>
 								)}
 
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "#1877f2",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-facebook'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "#1d9bf0",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-twitter'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "#0a66c2",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-linkedin'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
+								{facebook != null && (
+									<IconButton
+										component='a'
+										href={facebook}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "#1877f2",
+											},
+										}}
+									>
+										<i
+											className='fa-brands fa-facebook'
+											style={{ fontSize: 25 }}
+										></i>
+									</IconButton>
+								)}
+
+								{twitter != null && (
+									<IconButton
+										component='a'
+										href={twitter}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "#1d9bf0",
+											},
+										}}
+									>
+										<i
+											className='fa-brands fa-twitter'
+											style={{ fontSize: 25 }}
+										></i>
+									</IconButton>
+								)}
+
+								{linkedin != null && (
+									<IconButton
+										component='a'
+										href={linkedin}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "#0a66c2",
+											},
+										}}
+									>
+										<i
+											className='fa-brands fa-linkedin'
+											style={{ fontSize: 25 }}
+										></i>
+									</IconButton>
+								)}
 							</Box>
 						</Grid>
 						<Grid container spacing={6} sx={{ padding: 3 }}>
@@ -367,6 +376,23 @@ export const ProfileScreen = () => {
 
 									<Typography>{country}</Typography>
 								</Box>
+
+								<Box sx={{ mt: 3 }}>
+									{/* <Typography
+										sx={{
+											fontWeight: "bold",
+											fontSize: 13,
+										}}
+									>
+										Usuario
+									</Typography> */}
+
+									<Typography>
+										{type === 4
+											? "Promotor"
+											: "Profesional de la Salud"}
+									</Typography>
+								</Box>
 							</Grid>
 							<Grid
 								item
@@ -415,14 +441,16 @@ export const ProfileScreen = () => {
 								)}
 
 								<Box sx={{ mt: 2 }}>
-									<Typography>
-										<Button
-											variant='contained'
-											size='small'
-										>
-											Cambiar Plan
-										</Button>
-									</Typography>
+									<Link to='/profile/payment'>
+										<Typography>
+											<Button
+												variant='contained'
+												size='small'
+											>
+												Cambiar Plan
+											</Button>
+										</Typography>
+									</Link>
 								</Box>
 							</Grid>
 							<Grid

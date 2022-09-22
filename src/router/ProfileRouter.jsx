@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import { PaymentScreen } from "../page/payment/PaymentScreen";
 import { ProfileEditScreen } from "../page/profile/ProfileEditScreen";
 import { ProfileScreen } from "../page/profile/ProfileScreen";
 import { ChangeEmailScreen } from "../page/profile/sections_edit/ChangeEmailScreen";
@@ -11,6 +12,7 @@ export const ProfileRouter = () => {
 	return (
 		<Routes>
 			<Route path='/' element={<ProfileScreen />} />
+			<Route path='/payment' element={<PaymentScreen />} />
 			<Route path='/edit' element={<ProfileEditScreen />} />
 			<Route
 				path='/edit/change_name/:n/:lname/:id'
