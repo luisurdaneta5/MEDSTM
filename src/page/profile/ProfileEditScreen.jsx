@@ -308,7 +308,7 @@ export const ProfileEditScreen = () => {
 								mt: 1,
 							}}
 						>
-							<Link to='/dashboard/profile'>
+							<Link to='/profile'>
 								<Button
 									variant='contained'
 									color='primary'

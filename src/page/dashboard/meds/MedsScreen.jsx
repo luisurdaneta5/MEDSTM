@@ -26,6 +26,7 @@ import { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import { Api } from "../../../api";
+import { Link } from "react-router-dom";
 
 function createData(name, lastname, plan, vencimiento, status) {
 	return { name, lastname, plan, vencimiento, status };
@@ -98,19 +99,22 @@ export const MedsScreen = () => {
 
 	return (
 		<DashboardLayout>
-			<Tooltip title='Crear Nuevo'>
-				<Fab
-					color='primary'
-					aria-label='add'
-					sx={{
-						position: "fixed",
-						bottom: "2rem",
-						right: "2rem",
-					}}
-				>
-					<AddIcon />
-				</Fab>
-			</Tooltip>
+			<Link to='/dashboard/meds/create'>
+				<Tooltip title='Crear Nuevo'>
+					<Fab
+						color='primary'
+						aria-label='add'
+						sx={{
+							position: "fixed",
+							bottom: "2rem",
+							right: "2rem",
+						}}
+					>
+						<AddIcon />
+					</Fab>
+				</Tooltip>
+			</Link>
+
 			<Box sx={{ mb: 5 }}>
 				<Typography variant='h6' componet='div'>
 					Profesionales de la Salud

@@ -3,6 +3,7 @@ import { BlogCreateScreen } from "../page/dashboard/blog/BlogCreateScreen";
 import { BlogEditScreen } from "../page/dashboard/blog/BlogEditScreen";
 import { BlogScreen } from "../page/dashboard/blog/BlogScreen";
 import { IndexScreen } from "../page/dashboard/index/IndexScreen";
+import { MedsCreateScreen } from "../page/dashboard/meds/MedsCreateScreen";
 import { MedsScreen } from "../page/dashboard/meds/MedsScreen";
 import { ProfileScreen } from "../page/dashboard/profile/ProfileScreen";
 import { PromoterScreen } from "../page/dashboard/promoters/PromoterScreen";
@@ -17,6 +18,7 @@ export const DashboardRouter = () => {
 		<Routes>
 			<Route path='/' element={<IndexScreen />} />
 			<Route path='/meds' element={<MedsScreen />} />
+			<Route path='/meds/create' element={<MedsCreateScreen />} />
 			<Route path='/promoters' element={<PromoterScreen />} />
 			<Route path='/requests' element={<RequestScreen />} />
 			<Route path='/blogs' element={<BlogScreen />} />

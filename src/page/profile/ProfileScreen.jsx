@@ -17,6 +17,7 @@ import {
 	TablePagination,
 	TextField,
 	IconButton,
+	Alert,
 } from "@mui/material";
 import { Api } from "../../api";
 import usdt from "../../assets/usdt.png";
@@ -30,11 +31,14 @@ import { SpecialitiesTable } from "./components/SpecialitiesTable";
 import { AddressTable } from "./components/AddressTable";
 import { WithdrawalsTable } from "./components/WithdrawalsTable";
 import copy from "copy-to-clipboard";
+import { WithdrawalModal } from "./WithdrawalModal";
 
 export const ProfileScreen = () => {
 	const uid = localStorage.getItem("id");
 	const [image, setImage] = useState("");
 	const [social, setSocial] = useState([]);
+	const [payment, setPayment] = useState("");
+	const [open, setOpen] = useState(false);
 
 	const [user, setUser] = useState({
 		referrals: [],
@@ -43,6 +47,14 @@ export const ProfileScreen = () => {
 		withdrawals: [],
 		code: [],
 	});
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	const [balance, setBalance] = useState(0);
 
@@ -60,9 +72,15 @@ export const ProfileScreen = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
 
-	useEffect(() => {
+		Api.get("/payments/status/0", {
+			params: {
+				uid,
+			},
+		})
+			.then((res) => setPayment(res.data.exist))
+			.catch((err) => console.log(err));
+
 		Api.get("/social/getSocial", {
 			params: {
 				id: uid,
@@ -229,7 +247,7 @@ export const ProfileScreen = () => {
 							}}
 						>
 							<Box>
-								{instagram != null && (
+								{instagram != " " && (
 									<IconButton
 										component='a'
 										href={instagram}
@@ -250,7 +268,7 @@ export const ProfileScreen = () => {
 									</IconButton>
 								)}
 
-								{facebook != null && (
+								{facebook !== " " && (
 									<IconButton
 										component='a'
 										href={facebook}
@@ -268,7 +286,7 @@ export const ProfileScreen = () => {
 									</IconButton>
 								)}
 
-								{twitter != null && (
+								{twitter != "" && (
 									<IconButton
 										component='a'
 										href={twitter}
@@ -286,7 +304,7 @@ export const ProfileScreen = () => {
 									</IconButton>
 								)}
 
-								{linkedin != null && (
+								{linkedin != "" && (
 									<IconButton
 										component='a'
 										href={linkedin}
@@ -388,7 +406,7 @@ export const ProfileScreen = () => {
 									</Typography> */}
 
 									<Typography>
-										{type === 4
+										{type == 4
 											? "Promotor"
 											: "Profesional de la Salud"}
 									</Typography>
@@ -440,18 +458,27 @@ export const ProfileScreen = () => {
 									</Box>
 								)}
 
-								<Box sx={{ mt: 2 }}>
-									<Link to='/profile/payment'>
-										<Typography>
-											<Button
-												variant='contained'
-												size='small'
-											>
-												Cambiar Plan
-											</Button>
-										</Typography>
-									</Link>
-								</Box>
+								{payment ? (
+									<Box>
+										<Alert severity='info'>
+											Usted tiene un proceso activo para
+											cambio de plan
+										</Alert>
+									</Box>
+								) : (
+									<Box sx={{ mt: 2 }}>
+										<Link to='/profile/payment'>
+											<Typography>
+												<Button
+													variant='contained'
+													size='small'
+												>
+													Cambiar Plan
+												</Button>
+											</Typography>
+										</Link>
+									</Box>
+								)}
 							</Grid>
 							<Grid
 								item
@@ -485,10 +512,16 @@ export const ProfileScreen = () => {
 									</Typography>
 								</Box>
 
+								<WithdrawalModal
+									handleClose={handleClose}
+									open={open}
+									setOpen={setOpen}
+								/>
 								{balance != 0 && (
 									<Box sx={{ mt: 2 }}>
 										<Typography>
 											<Button
+												onClick={handleOpen}
 												variant='contained'
 												size='small'
 											>
