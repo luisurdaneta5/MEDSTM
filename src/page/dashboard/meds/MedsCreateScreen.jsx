@@ -11,14 +11,28 @@ import {
 	IconButton,
 	FormControl,
 	OutlinedInput,
+	Avatar,
+	Badge,
+	Input,
 } from "@mui/material";
 import { countries } from "../../../data/countries";
 import { useState } from "react";
 import { useForm } from "../../../hooks/useForm";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { styled } from "@mui/material/styles";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
+
+const SmallAvatar = styled(Avatar)(({ theme }) => ({
+	width: 30,
+	height: 30,
+	border: `2px solid ${theme.palette.background.paper}`,
+}));
 
 export const MedsCreateScreen = () => {
+	const [open, setOpen] = useState(false);
+
+	const handleOpen = () => setOpen(true);
 	const [country_value, setCountry_value] = useState({
 		country: "",
 		country_code: "",
@@ -60,6 +74,9 @@ export const MedsCreateScreen = () => {
 
 	const { name, lastname, email, phone, province, city } = formValues;
 
+	const handleImgProfileSet = () => {
+		console.log("Hola Mundo");
+	};
 	return (
 		<DashboardLayout>
 			<Container maxWidth='lg'>
@@ -71,6 +88,39 @@ export const MedsCreateScreen = () => {
 
 				<Box>
 					<Grid container spacing={2}>
+						<Grid
+							item
+							lg={12}
+							sx={{
+								display: "flex",
+								justifyContent: "center",
+								mb: 3,
+							}}
+						>
+							<Badge
+								overlap='circular'
+								anchorOrigin={{
+									vertical: "bottom",
+									horizontal: "right",
+									width: "100px",
+									height: "100px",
+								}}
+								badgeContent={
+									<IconButton onClick={handleImgProfileSet}>
+										<CameraAltIcon></CameraAltIcon>
+									</IconButton>
+								}
+							>
+								<Avatar
+									alt='Travis Howard'
+									src='/static/images/avatar/2.jpg'
+									sx={{
+										width: "90px",
+										height: "90px",
+									}}
+								/>
+							</Badge>
+						</Grid>
 						<Grid item lg={6}>
 							<Box>
 								<TextField
