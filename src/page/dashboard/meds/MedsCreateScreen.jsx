@@ -14,6 +14,7 @@ import {
 	Avatar,
 	Badge,
 	Input,
+	FormHelperText,
 } from "@mui/material";
 import { countries } from "../../../data/countries";
 import { useState } from "react";
@@ -23,6 +24,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { styled } from "@mui/material/styles";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { ModalImg } from "./components/ModalImg";
+import { toast } from "react-toastify";
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
 	width: 30,
@@ -40,9 +42,10 @@ export const MedsCreateScreen = () => {
 		lastname: false,
 		email: false,
 		phone: false,
-		country: false,
 		province: false,
 		city: false,
+		password: false,
+		confirmPassword: false,
 	});
 
 	const [country_value, setCountry_value] = useState({
@@ -115,23 +118,82 @@ export const MedsCreateScreen = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		const formData = new FormData();
-
 		if (name == "") {
 			setErrors({
 				...errors,
 				name: true,
 			});
 		} else if (avatar == "") {
-			alert("avatar vacio");
+			toast.error("Seleccione una foto de prefil.", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
 		} else if (lastname == "") {
 			setErrors({
 				...errors,
 				lastname: true,
 			});
-		}
+		} else if (email == "") {
+			setErrors({
+				...errors,
+				email: true,
+			});
+		} else if (phone == "") {
+			setErrors({
+				...errors,
+				phone: true,
+			});
+		} else if (country == "") {
+			toast.error("Seleccione su pais.", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		} else if (province == "") {
+			setErrors({
+				...errors,
+				province: true,
+			});
+		} else if (city == "") {
+			setErrors({
+				...errors,
+				city: true,
+			});
+		} else if (password == "") {
+			setErrors({
+				...errors,
+				password: true,
+			});
+		} else if (confirmPassword == "") {
+			setErrors({
+				...errors,
+				confirmPassword: true,
+			});
+		} else if (password != confirmPassword) {
+			toast.error("Las contraseñas no coinciden", {
+				position: "top-right",
+				autoClose: 5000,
+				hideProgressBar: false,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			});
+		} else {
+			const formData = new FormData();
 
-		formData.append("avatar", avatar);
+			formData.append("avatar", avatar);
+			formData.append("name", name);
+		}
 	};
 
 	return (
@@ -235,6 +297,10 @@ export const MedsCreateScreen = () => {
 										value={email}
 										onChange={handleInputChange}
 										autoComplete='off'
+										helperText={
+											errors.email && "Campo requerido"
+										}
+										error={errors.email}
 									/>
 								</Box>
 							</Grid>
@@ -249,6 +315,10 @@ export const MedsCreateScreen = () => {
 										value={phone}
 										onChange={handleInputChange}
 										autoComplete='off'
+										helperText={
+											errors.phone && "Campo requerido"
+										}
+										error={errors.phone}
 									/>
 								</Box>
 							</Grid>
@@ -256,6 +326,7 @@ export const MedsCreateScreen = () => {
 							<Grid item lg={4}>
 								<Box>
 									<Autocomplete
+										error
 										id='country-select-demo'
 										options={countries}
 										autoHighlight
@@ -315,6 +386,10 @@ export const MedsCreateScreen = () => {
 										name='province'
 										value={province}
 										onChange={handleInputChange}
+										helperText={
+											errors.province && "Campo requerido"
+										}
+										error={errors.province}
 									/>
 								</Box>
 							</Grid>
@@ -328,6 +403,10 @@ export const MedsCreateScreen = () => {
 										name='city'
 										value={city}
 										onChange={handleInputChange}
+										helperText={
+											errors.city && "Campo requerido"
+										}
+										error={errors.city}
 									/>
 								</Box>
 							</Grid>
@@ -375,7 +454,15 @@ export const MedsCreateScreen = () => {
 											fullWidth
 											value={password}
 											onChange={handleChange("password")}
+											error={errors.password}
 										/>
+										{errors.password && (
+											<FormHelperText
+												sx={{ color: "#d32f2f" }}
+											>
+												Campo requerido
+											</FormHelperText>
+										)}
 									</FormControl>
 								</Box>
 							</Grid>
@@ -425,7 +512,15 @@ export const MedsCreateScreen = () => {
 											onChange={handleChange(
 												"confirmPassword"
 											)}
+											error={errors.confirmPassword}
 										/>
+										{errors.confirmPassword && (
+											<FormHelperText
+												sx={{ color: "#d32f2f" }}
+											>
+												Campo requerido
+											</FormHelperText>
+										)}
 									</FormControl>
 								</Box>
 							</Grid>
