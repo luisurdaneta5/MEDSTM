@@ -40,6 +40,7 @@ export const ProfileScreen = () => {
 	const [payment, setPayment] = useState("");
 	const [open, setOpen] = useState(false);
 
+	console.log(image.url);
 	const [user, setUser] = useState({
 		referrals: [],
 		my_specialities: [],
@@ -209,7 +210,7 @@ export const ProfileScreen = () => {
 						>
 							<Avatar
 								alt={name}
-								src={image.url}
+								src=''
 								sx={{
 									width: "100px",
 									height: "100px",
