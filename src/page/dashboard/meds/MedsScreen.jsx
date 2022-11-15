@@ -28,15 +28,15 @@ import AddIcon from "@mui/icons-material/Add";
 import { Api } from "../../../api";
 import { Link } from "react-router-dom";
 
-function createData(name, lastname, plan, vencimiento, status) {
-	return { name, lastname, plan, vencimiento, status };
+function createData(id, avatar, name, lastname, plan, vencimiento, status) {
+	return { id, avatar, name, lastname, plan, vencimiento, status };
 }
 
 export const MedsScreen = () => {
 	const [meds, setMeds] = useState([]);
 
 	useEffect(() => {
-		Api.get(`/user/all?type=${3}`)
+		Api.get(`/user/all?type=3`)
 			.then((res) => {
 				setMeds(res.data.users);
 			})
@@ -47,6 +47,8 @@ export const MedsScreen = () => {
 
 	const rows = meds.map((med) => {
 		return createData(
+			med.id,
+			med.documents[0].url,
 			med.name,
 			med.lastname,
 			med.plan,
@@ -182,7 +184,7 @@ export const MedsScreen = () => {
 								)
 								.map((row, index) => (
 									<TableRow
-										key={index}
+										key={row.id}
 										sx={{
 											"&:last-child td, &:last-child th":
 												{
@@ -193,7 +195,7 @@ export const MedsScreen = () => {
 										<TableCell>
 											<Avatar
 												alt={row.name}
-												src='/static/images/avatar/1.jpg'
+												src={row.avatar}
 											/>
 										</TableCell>
 										<TableCell component='th' scope='row'>
@@ -361,13 +363,17 @@ export const MedsScreen = () => {
 												}}
 											>
 												<Grid item sm={6}>
-													<Button
-														variant='contained'
-														size='small'
-														fullWidth
+													<Link
+														to={`/dashboard/meds/edit/${row.id}`}
 													>
-														Editar
-													</Button>
+														<Button
+															variant='contained'
+															size='small'
+															fullWidth
+														>
+															Editar
+														</Button>
+													</Link>
 												</Grid>
 
 												<Grid item sm={6}>

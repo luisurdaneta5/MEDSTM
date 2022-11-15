@@ -26,7 +26,8 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { ModalImg } from "./components/ModalImg";
 import { toast } from "react-toastify";
 import Api from "../../../api/Api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
 	width: 30,
@@ -34,7 +35,14 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
 	border: `2px solid ${theme.palette.background.paper}`,
 }));
 
-export const MedsCreateScreen = () => {
+export const MedsEditScreen = () => {
+	const { id } = useParams();
+	console.log(id);
+
+	// useEffect(() => {
+	// 	Api.get("/user/dashboard/editUser");
+	// }, []);
+
 	const [open, setOpen] = useState(false);
 	const [avatar, setAvatar] = useState("");
 	const handleOpen = () => setOpen(true);
@@ -121,129 +129,13 @@ export const MedsCreateScreen = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
-		if (name == "") {
-			setErrors({
-				...errors,
-				name: true,
-			});
-		} else if (avatar == "") {
-			toast.error("Seleccione una foto de prefil.", {
-				position: "top-right",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
-		} else if (lastname == "") {
-			setErrors({
-				...errors,
-				lastname: true,
-			});
-		} else if (email == "") {
-			setErrors({
-				...errors,
-				email: true,
-			});
-		} else if (phone == "") {
-			setErrors({
-				...errors,
-				phone: true,
-			});
-		} else if (country == "") {
-			toast.error("Seleccione su pais.", {
-				position: "top-right",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
-		} else if (province == "") {
-			setErrors({
-				...errors,
-				province: true,
-			});
-		} else if (city == "") {
-			setErrors({
-				...errors,
-				city: true,
-			});
-		} else if (password == "") {
-			setErrors({
-				...errors,
-				password: true,
-			});
-		} else if (confirmPassword == "") {
-			setErrors({
-				...errors,
-				confirmPassword: true,
-			});
-		} else if (password != confirmPassword) {
-			toast.error("Las contraseñas no coinciden", {
-				position: "top-right",
-				autoClose: 5000,
-				hideProgressBar: false,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-			});
-		} else {
-			let formData = new FormData();
-
-			formData.append("avatar", avatar);
-			formData.append("name", name);
-			formData.append("lastname", lastname);
-			formData.append("email", email);
-			formData.append("phone", phone);
-			formData.append("province", province);
-			formData.append("city", city);
-			formData.append("country", country);
-			formData.append("country_code", country_code);
-			formData.append("type", 3);
-			formData.append("password", password);
-
-			Api.post("/user/dashboard/createUser", formData, {
-				headers: { "Content-Type": "multipart/form-data" },
-			})
-				.then((res) => {
-					toast.success(res.data.message, {
-						position: "top-right",
-						autoClose: 5000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-					});
-
-					navigate("/dashboard/meds");
-				})
-				.catch((err) => {
-					console.log(err);
-					toast.error(err.response.data.message, {
-						position: "top-right",
-						autoClose: 5000,
-						hideProgressBar: false,
-						closeOnClick: true,
-						pauseOnHover: true,
-						draggable: true,
-						progress: undefined,
-					});
-				});
-		}
 	};
-
 	return (
 		<DashboardLayout>
 			<Container maxWidth='lg'>
 				<Box sx={{ mb: 5 }}>
 					<Typography variant='h6' componet='div'>
-						Crear nuevo Profesional de la Salud
+						Editar Profesional de la Salud
 					</Typography>
 				</Box>
 
