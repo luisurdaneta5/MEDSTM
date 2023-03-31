@@ -1,3 +1,4 @@
+import React from "react";
 import { DashboardLayout } from "../../../layouts/DashboardLayout";
 import {
 	Box,
@@ -19,34 +20,44 @@ import {
 	InputAdornment,
 	Fab,
 	Avatar,
+	Chip,
 } from "@mui/material";
+
 import { useState, useEffect } from "react";
+
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
-import moment from "moment";
 import { Api } from "../../../api";
-import { Link } from "react-router-dom";
+import moment from "moment";
+import Swal from "sweetalert2";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getPayments } from "../../../store/slices/ui/getPayments";
 
-function createData(id, avatar, name, lastname, plan, vencimiento, status) {
-	return { id, avatar, name, lastname, plan, vencimiento, status };
+function createData(user, username, amount, transaccion, plan, date, userId, paymentId, status) {
+	return { user, username, amount, transaccion, plan, date, userId, paymentId, status };
 }
 
-export const PromoterScreen = () => {
-	const [promoters, setPromoter] = useState([]);
+export const PaymentScreen = () => {
+	const [payments, setPayments] = useState([]);
+
+	const rows = payments.map((payment) => {
+		return createData(
+			payment.user.name + " " + payment.user.lastname,
+			payment.binanceUser,
+			payment.amount,
+			payment.transactionId,
+			payment.plan,
+			payment.createdAt,
+			payment.user.id,
+			payment.id,
+			payment.status
+		);
+	});
 
 	useEffect(() => {
-		Api.get(`/user/all?type=${4}`)
-			.then((res) => {
-				setPromoter(res.data.users);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		getPayments(setPayments);
 	}, []);
-
-	const rows = promoters.map((promoter) => {
-		return createData(promoter.id, promoter.documents[0].url, promoter.name, promoter.lastname, promoter.plan, Date.now(), promoter.status);
-	});
 
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
@@ -62,19 +73,11 @@ export const PromoterScreen = () => {
 	if (!search) {
 		results = rows;
 	} else {
-		results = rows.filter((row) => (row.name + " " + row.lastname + " " + row.plan + " " + row.status).toLowerCase().includes(search.toLowerCase().trim()));
+		results = rows.filter((row) => (row.user + " " + row.username + " " + row.amount + " " + row.plan + " " + row.date).toLowerCase().includes(search.toLowerCase().trim()));
 	}
-
-	const [icon, setIcon] = useState(false);
 
 	const handleViewSearch = () => {
 		setIcon(true);
-	};
-
-	const handleClearSearch = () => {
-		setIcon(false);
-		reset();
-		console.log("Busqueda reiniciada");
 	};
 
 	const handleChangePage = (e, newPage) => {
@@ -86,26 +89,34 @@ export const PromoterScreen = () => {
 		setPage(0);
 	};
 
+	const handleSetPaymentSucces = (userId, date, plan, paymentId) => {
+		Swal.fire({
+			title: "Estas seguro de aceptar el pago?",
+			showCancelButton: true,
+			confirmButtonText: "Si, seguro",
+			confirmButtonColor: "#018f98",
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Api.put("/payments/setPaymentSucces", {
+					userId,
+					date,
+					plan,
+					paymentId,
+				})
+					.then((res) => {
+						toast.success(res.data.message);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			}
+		});
+	};
 	return (
 		<DashboardLayout>
-			<Link to='/dashboard/promoters/create'>
-				<Tooltip title='Crear Nuevo'>
-					<Fab
-						color='primary'
-						aria-label='add'
-						sx={{
-							position: "fixed",
-							bottom: "2rem",
-							right: "2rem",
-						}}
-					>
-						<AddIcon />
-					</Fab>
-				</Tooltip>
-			</Link>
 			<Box sx={{ mb: 5 }}>
 				<Typography variant='h6' componet='div'>
-					Promotores
+					Pagos y/o Cambios de Plan
 				</Typography>
 			</Box>
 			<Box sx={{ mt: 3, mb: 2 }}>
@@ -128,27 +139,16 @@ export const PromoterScreen = () => {
 				</FormControl>
 			</Box>
 			<TableContainer component={Paper} sx={{ border: "1px solid black" }}>
-				{/* <Box
-					sx={{
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						textAlign: "center",
-						mt: 2,
-						mb: 2,
-					}}
-				>
-					<CircularProgress />
-				</Box> */}
 				<Table sx={{ minWidth: 650 }} size='small'>
 					<TableHead>
 						<TableRow>
-							<TableCell align='left'>Avatar</TableCell>
 							<TableCell align='left'>Nombre</TableCell>
-							<TableCell align='center'>Plan</TableCell>
-							<TableCell align='center'>Status</TableCell>
-							<TableCell align='center'>Vencimiento</TableCell>
-							<TableCell align='center'>Acciones</TableCell>
+							<TableCell align='left'>Usuario Binance</TableCell>
+							<TableCell align='left'>Monto</TableCell>
+							<TableCell align='left'>Transaccion</TableCell>
+							<TableCell align='left'>Plan</TableCell>
+							<TableCell align='left'>Fecha</TableCell>
+							<TableCell align='left'></TableCell>
 						</TableRow>
 					</TableHead>
 
@@ -169,13 +169,19 @@ export const PromoterScreen = () => {
 										},
 									}}
 								>
-									<TableCell align='left'>
-										<Avatar alt={row.name} src={row.avatar} />
+									<TableCell>{row.user}</TableCell>
+									<TableCell component='th' scope='row'>
+										{row.username}
 									</TableCell>
-									<TableCell align='left'>
-										{row.name} {row.lastname}
+									<TableCell component='th' scope='row'>
+										$ {row.amount}
 									</TableCell>
-									<TableCell align='center'>
+
+									<TableCell component='th' scope='row'>
+										{row.transaccion}
+									</TableCell>
+									<TableCell component='th' scope='row'>
+										{row.plan}
 										{row.plan === "Gratis" && (
 											<Tooltip title='Gratis'>
 												<i
@@ -189,7 +195,7 @@ export const PromoterScreen = () => {
 											</Tooltip>
 										)}
 
-										{row.plan === "Basic" && (
+										{row.plan === "Basico" && (
 											<Tooltip title='Basica'>
 												<i
 													className='fa-solid fa-medal'
@@ -293,54 +299,32 @@ export const PromoterScreen = () => {
 											</Tooltip>
 										)}
 									</TableCell>
-									<TableCell align='center'>
-										{row.status === 1 ? (
-											<Alert
-												severity='success'
-												size='small'
-												sx={{
-													textAlign: "center",
-												}}
-											>
-												Activo
-											</Alert>
-										) : (
-											<Alert
-												severity='error'
-												size='small'
-												sx={{
-													textAlign: "center",
-												}}
-											>
-												Inactivo
-											</Alert>
-										)}
+
+									<TableCell component='th' scope='row'>
+										{moment(row.date).format("LLL")}
 									</TableCell>
-									<TableCell align='center'>{row.plan === "Gratis" ? <Typography>Ilimitada</Typography> : row.vencimiento}</TableCell>
 
 									<TableCell align='right'>
-										<Grid
-											container
-											spacing={1}
-											sx={{
-												display: "flex",
-												justifyContent: "space-between",
-											}}
-										>
-											<Grid item sm={12}>
-												<Link to={`/dashboard/promoters/edit/${row.id}`}>
-													<Button variant='contained' size='small' fullWidth>
-														Editar
-													</Button>
-												</Link>
+										{row.status == 0 && (
+											<Grid
+												container
+												spacing={1}
+												sx={{
+													display: "flex",
+													justifyContent: "space-between",
+												}}
+											>
+												<Grid item sm={12}>
+													<Link to={`/dashboard/payments/details/${row.paymentId}`}>
+														<Button variant='contained' size='small' fullWidth>
+															Ver detalles
+														</Button>
+													</Link>
+												</Grid>
 											</Grid>
-											{/* 
-											<Grid item sm={6}>
-												<Button variant='contained' size='small' fullWidth color='error'>
-													Eliminar
-												</Button>
-											</Grid> */}
-										</Grid>
+										)}
+										{row.status == 1 && <Chip label='Pago Aceptado' color='success' variant='outlined' />}
+										{row.status == 2 && <Chip label='Pago Rechazado' color='error' variant='outlined' />}
 									</TableCell>
 								</TableRow>
 							))

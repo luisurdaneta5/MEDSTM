@@ -3,7 +3,7 @@ import { Container, Box, TextField, Typography, Button } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setNewSpeciality } from "../../../store/slices/dashboard";
 
 export const SpecialityCreateScreen = () => {
@@ -39,15 +39,7 @@ export const SpecialityCreateScreen = () => {
 						>
 							Especialidad:
 						</label>
-						<TextField
-							id='outlined-basic'
-							label=''
-							size='small'
-							autoComplete='off'
-							name='name'
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
+						<TextField id='outlined-basic' label='' size='small' autoComplete='off' name='name' value={name} onChange={(e) => setName(e.target.value)} />
 					</Box>
 					<Box
 						sx={{
@@ -63,13 +55,7 @@ export const SpecialityCreateScreen = () => {
 						>
 							Imagen:
 						</label>
-						<input
-							type='file'
-							className='dropzone'
-							name='img'
-							accept='image/png,image/jpeg'
-							onChange={(e) => setImage(e.target.files[0])}
-						/>
+						<input type='file' className='dropzone' name='img' accept='image/png,image/jpeg' onChange={(e) => setImage(e.target.files[0])} />
 					</Box>
 					<Box
 						sx={{
@@ -78,21 +64,15 @@ export const SpecialityCreateScreen = () => {
 							mt: 3,
 						}}
 					>
-						<Button
-							variant='contained'
-							color='primary'
-							type='submit'
-						>
+						<Button variant='contained' color='primary' type='submit'>
 							Enviar
 						</Button>
 
-						<Button
-							variant='contained'
-							color='error'
-							sx={{ ml: 2 }}
-						>
-							cancelar
-						</Button>
+						<Link to={"/dashboard/speciality"}>
+							<Button variant='contained' color='error' sx={{ ml: 2 }}>
+								cancelar
+							</Button>
+						</Link>
 					</Box>
 				</form>
 			</Container>

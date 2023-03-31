@@ -1,24 +1,12 @@
 import { useState } from "react";
-import {
-	Box,
-	FormControl,
-	IconButton,
-	InputAdornment,
-	OutlinedInput,
-	Paper,
-	Typography,
-	Container,
-	Divider,
-	Grid,
-	Button,
-} from "@mui/material";
+import { Box, FormControl, IconButton, InputAdornment, OutlinedInput, Paper, Typography, Container, Divider, Grid, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import HighlightOffTwoToneIcon from "@mui/icons-material/HighlightOffTwoTone";
 import { GeneralLayout } from "../../layouts/GeneralLayout";
 import "./styles.css";
 import { useForm } from "../../hooks/useForm";
 import { ReactWorldCountriesMap } from "react-world-countries-map";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { getCountriesData } from "../../store/slices/ui/getCountriesData";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +42,7 @@ export const HomeScreen = () => {
 	const onSearchSubmit = (e) => {
 		e.preventDefault();
 		if (search.trim().length <= 1) return;
-		navigate(`/search?query=${search.toLowerCase().trim()}`);
+		navigate(`/search/${search.toLowerCase().trim()}`);
 	};
 
 	const [icon, setIcon] = useState(false);
@@ -74,6 +62,7 @@ export const HomeScreen = () => {
 				className={"box-img"}
 				sx={{
 					height: "550px",
+					width: "100%",
 					backgroundImage: {
 						xl: `url(src/assets/meds-xl.png)`,
 						lg: `url(src/assets/meds-lg.png)`,
@@ -88,16 +77,12 @@ export const HomeScreen = () => {
 						}}
 					>
 						<Typography variant='h5' color='white'>
-							ENCUENTRA TU MEJOR DOCTOR <br /> DONDE QUIERA QUE
-							ESTES
+							ENCUENTRA TU MEJOR DOCTOR <br /> DONDE QUIERA QUE ESTES
 						</Typography>
 
 						<Typography sx={{ mt: 3 }}>
-							Lorem ipsum, dolor sit amet consectetur adipisicing
-							elit. Quo consequatur porro nulla dolore nesciunt
-							expedita, nam atque qui a ex. Hic, nobis voluptatem.
-							Eum, expedita. Officia, officiis. Consequuntur, ut
-							consequatur.
+							Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo consequatur porro nulla dolore nesciunt expedita, nam atque qui a ex. Hic, nobis
+							voluptatem. Eum, expedita. Officia, officiis. Consequuntur, ut consequatur.
 						</Typography>
 						<form onSubmit={onSearchSubmit}>
 							<Box sx={{ mt: 3 }}>
@@ -115,11 +100,7 @@ export const HomeScreen = () => {
 										endAdornment={
 											icon && (
 												<InputAdornment position='end'>
-													<IconButton
-														onClick={
-															handleClearSearch
-														}
-													>
+													<IconButton onClick={handleClearSearch}>
 														<HighlightOffTwoToneIcon />
 													</IconButton>
 												</InputAdornment>
@@ -151,10 +132,7 @@ export const HomeScreen = () => {
 						}}
 					/>
 				</Box>
-				<Typography>
-					Tenemos Medicos de todas partes del mundo al alcanze de un
-					solo click...
-				</Typography>
+				<Typography>Tenemos Medicos de todas partes del mundo al alcanze de un solo click...</Typography>
 				<Box
 					sx={{
 						display: "flex",
@@ -163,13 +141,7 @@ export const HomeScreen = () => {
 					}}
 					className='SizeMap'
 				>
-					<ReactWorldCountriesMap
-						tooltipBgColor='#ff8304'
-						color='#018f98'
-						value-suffix='Medicos'
-						size='responsive'
-						data={countries}
-					/>
+					<ReactWorldCountriesMap tooltipBgColor='#ff8304' color='#018f98' value-suffix='Medicos' size='responsive' data={countries} />
 					{/* <img src={map} alt='' width='70%' /> */}
 				</Box>
 			</Container>
@@ -191,8 +163,7 @@ export const HomeScreen = () => {
 									fontWeight: 600,
 								}}
 							>
-								Es un Medico apasionado y puede brindar
-								servicios de <br />
+								Es un Medico apasionado y puede brindar servicios de <br />
 								clase mundial ?
 							</Typography>
 							<Divider
@@ -204,8 +175,7 @@ export const HomeScreen = () => {
 								}}
 							/>
 							<Typography sx={{ color: "white" }}>
-								There are many variations of passages of Lorem
-								Ipsum available, but the majority
+								There are many variations of passages of Lorem Ipsum available, but the majority
 								<br /> have suffered Lorem Ipsum
 							</Typography>
 							<Button
@@ -232,8 +202,7 @@ export const HomeScreen = () => {
 									fontWeight: 600,
 								}}
 							>
-								Es un Medico apasionado y puede brindar
-								servicios de <br />
+								Es un Medico apasionado y puede brindar servicios de <br />
 								clase mundial ?
 							</Typography>
 							<Divider
@@ -245,8 +214,7 @@ export const HomeScreen = () => {
 								}}
 							/>
 							<Typography sx={{ color: "white" }}>
-								There are many variations of passages of Lorem
-								Ipsum available, but the majority
+								There are many variations of passages of Lorem Ipsum available, but the majority
 								<br /> have suffered Lorem Ipsum
 							</Typography>
 							<Button
@@ -289,26 +257,21 @@ export const HomeScreen = () => {
 						<Grid container spacing={2}>
 							{specialities.map((speciality) => (
 								<Grid item xl={3} lg={3} key={speciality.id}>
-									<Box className='keep draw'>
-										<Box
-											sx={{
-												display: " flex",
-												flexDirection: "column",
-												justifyContent: "center",
-												alignItems: "center",
-											}}
-										>
-											<img
-												src={speciality.img}
-												alt={speciality.name}
-												width='260px'
-												height='163px'
-											/>
-											<Typography sx={{ mt: 1 }}>
-												{speciality.name}
-											</Typography>
+									<Link to={`/search/${speciality.code}`} style={{ textDecoration: "none", color: "black" }}>
+										<Box className='keep draw'>
+											<Box
+												sx={{
+													display: " flex",
+													flexDirection: "column",
+													justifyContent: "center",
+													alignItems: "center",
+												}}
+											>
+												<img src={speciality.img} alt={speciality.name} width='260px' height='163px' />
+												<Typography sx={{ mt: 1 }}>{speciality.name}</Typography>
+											</Box>
 										</Box>
-									</Box>
+									</Link>
 								</Grid>
 							))}
 						</Grid>

@@ -37,7 +37,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
 	border: `2px solid ${theme.palette.background.paper}`,
 }));
 
-export const MedsEditScreen = () => {
+export const PromoterEditScreen = () => {
 	const { id } = useParams();
 	const dispatch = useDispatch();
 	const [data, setData] = useState({});
@@ -193,19 +193,18 @@ export const MedsEditScreen = () => {
 						progress: undefined,
 					});
 
-					navigate("/dashboard/meds");
+					navigate("/dashboard/promoters");
 				})
 				.catch((err) => console.log(err));
 		}
 	};
-
 	return (
 		<DashboardLayout>
 			<Container maxWidth='lg'>
 				<Box>
 					<Box sx={{ mb: 5 }}>
 						<Typography variant='h6' componet='div'>
-							Editar Profesional de la Salud
+							Editar Promotor
 						</Typography>
 					</Box>
 
@@ -244,13 +243,7 @@ export const MedsEditScreen = () => {
 											}}
 										/>
 									</Badge>
-									<ModalImg
-										open={open}
-										onClose={onClose}
-										onCrop={onCrop}
-										setOpen={setOpen}
-										onBeforeFileLoad={onBeforeFileLoad}
-									/>
+									<ModalImg open={open} onClose={onClose} onCrop={onCrop} setOpen={setOpen} onBeforeFileLoad={onBeforeFileLoad} />
 								</Grid>
 								<Grid item lg={6}>
 									<Box>
@@ -489,11 +482,7 @@ export const MedsEditScreen = () => {
 															onMouseDown={handleMouseDownPassword}
 															edge='end'
 														>
-															{values.showOldPassword ? (
-																<VisibilityOff />
-															) : (
-																<Visibility />
-															)}
+															{values.showOldPassword ? <VisibilityOff /> : <Visibility />}
 														</IconButton>
 													</InputAdornment>
 												}
@@ -503,11 +492,7 @@ export const MedsEditScreen = () => {
 												onChange={handleChange("password")}
 												error={errors.password}
 											/>
-											{errors.password && (
-												<FormHelperText sx={{ color: "#d32f2f" }}>
-													Campo requerido
-												</FormHelperText>
-											)}
+											{errors.password && <FormHelperText sx={{ color: "#d32f2f" }}>Campo requerido</FormHelperText>}
 										</FormControl>
 									</Box>
 								</Grid>
@@ -535,11 +520,7 @@ export const MedsEditScreen = () => {
 															onMouseDown={handleMouseDownPassword}
 															edge='end'
 														>
-															{values.showConfirmPassword ? (
-																<VisibilityOff />
-															) : (
-																<Visibility />
-															)}
+															{values.showConfirmPassword ? <VisibilityOff /> : <Visibility />}
 														</IconButton>
 													</InputAdornment>
 												}
@@ -549,11 +530,7 @@ export const MedsEditScreen = () => {
 												onChange={handleChange("confirmPassword")}
 												error={errors.confirmPassword}
 											/>
-											{errors.confirmPassword && (
-												<FormHelperText sx={{ color: "#d32f2f" }}>
-													Campo requerido
-												</FormHelperText>
-											)}
+											{errors.confirmPassword && <FormHelperText sx={{ color: "#d32f2f" }}>Campo requerido</FormHelperText>}
 										</FormControl>
 									</Box>
 								</Grid>

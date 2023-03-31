@@ -26,20 +26,31 @@ import { useState, useEffect } from "react";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import { Api } from "../../../api";
+import moment from "moment";
 
 function createData(user, amount, wallet, date) {
 	return { user, amount, wallet, date };
 }
 
 export const WithdraScreen = () => {
-	const rows = [
-		createData(
-			"Luis Urdaneta",
-			"3.00",
-			"TSEDSCCDRTSDGTYSDFSYsdewffd",
-			Date.now()
-		),
-	];
+	// const rows = [createData("Luis Urdaneta", "3.00", "TSEDSCCDRTSDGTYSDFSYsdewffd", Date.now())];
+
+	const [withdrawals, setWithdrawals] = useState([]);
+
+	useEffect(() => {
+		Api.get("/withdrawals/get")
+			.then((res) => {
+				setWithdrawals(res.data.withdrawals);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
+
+	const rows = withdrawals.map((withdrawal) => {
+		return createData(withdrawal.user.name + " " + withdrawal.user.lastname, withdrawal.amount, withdrawal.wallet, withdrawal.createdAt, withdrawal.id);
+	});
 
 	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [page, setPage] = useState(0);
@@ -55,11 +66,7 @@ export const WithdraScreen = () => {
 	if (!search) {
 		results = rows;
 	} else {
-		results = rows.filter((row) =>
-			(row.title + " " + row.date)
-				.toLowerCase()
-				.includes(search.toLowerCase().trim())
-		);
+		results = rows.filter((row) => (row.title + " " + row.date).toLowerCase().includes(search.toLowerCase().trim()));
 	}
 
 	const handleViewSearch = () => {
@@ -101,10 +108,7 @@ export const WithdraScreen = () => {
 					/>
 				</FormControl>
 			</Box>
-			<TableContainer
-				component={Paper}
-				sx={{ border: "1px solid black" }}
-			>
+			<TableContainer component={Paper} sx={{ border: "1px solid black" }}>
 				<Table sx={{ minWidth: 650 }} size='small'>
 					<TableHead>
 						<TableRow>
@@ -124,67 +128,51 @@ export const WithdraScreen = () => {
 								</TableCell>
 							</TableRow>
 						) : (
-							results
-								.slice(
-									page * rowsPerPage,
-									page * rowsPerPage + rowsPerPage
-								)
-								.map((row, index) => (
-									<TableRow
-										key={index}
-										sx={{
-											"&:last-child td, &:last-child th":
-												{
-													border: 0,
-												},
-										}}
-									>
-										<TableCell>{row.user}</TableCell>
-										<TableCell component='th' scope='row'>
-											$ {row.amount}
-										</TableCell>
-										<TableCell component='th' scope='row'>
-											{row.wallet}
-										</TableCell>
+							results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+								<TableRow
+									key={index}
+									sx={{
+										"&:last-child td, &:last-child th": {
+											border: 0,
+										},
+									}}
+								>
+									<TableCell>{row.user}</TableCell>
+									<TableCell component='th' scope='row'>
+										$ {row.amount}
+									</TableCell>
+									<TableCell component='th' scope='row'>
+										{row.wallet}
+									</TableCell>
 
-										<TableCell component='th' scope='row'>
-											{row.date}
-										</TableCell>
+									<TableCell component='th' scope='row'>
+										{moment(row.date).format("LLL")}
+									</TableCell>
 
-										<TableCell align='right'>
-											<Grid
-												container
-												spacing={1}
-												sx={{
-													display: "flex",
-													justifyContent:
-														"space-between",
-												}}
-											>
-												<Grid item sm={6}>
-													<Button
-														variant='contained'
-														size='small'
-														fullWidth
-													>
-														Editar
-													</Button>
-												</Grid>
-
-												<Grid item sm={6}>
-													<Button
-														variant='contained'
-														size='small'
-														fullWidth
-														color='error'
-													>
-														Eliminar
-													</Button>
-												</Grid>
+									<TableCell align='right'>
+										<Grid
+											container
+											spacing={1}
+											sx={{
+												display: "flex",
+												justifyContent: "space-between",
+											}}
+										>
+											<Grid item sm={6}>
+												<Button variant='contained' size='small' fullWidth>
+													Pagado
+												</Button>
 											</Grid>
-										</TableCell>
-									</TableRow>
-								))
+
+											<Grid item sm={6}>
+												<Button variant='contained' size='small' fullWidth color='error'>
+													Rechazado
+												</Button>
+											</Grid>
+										</Grid>
+									</TableCell>
+								</TableRow>
+							))
 						)}
 					</TableBody>
 				</Table>

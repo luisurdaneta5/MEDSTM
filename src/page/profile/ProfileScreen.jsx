@@ -91,21 +91,7 @@ export const ProfileScreen = () => {
 
 	const { facebook, instagram, twitter, linkedin } = social;
 
-	const {
-		name,
-		lastname,
-		email,
-		phone,
-		country,
-		plan,
-		my_specialities,
-		referrals,
-		addresses,
-		withdrawals,
-		createdAt,
-		code,
-		type,
-	} = user;
+	const { name, lastname, email, phone, country, plan, my_specialities, referrals, addresses, withdrawals, createdAt, code, type } = user;
 
 	const handleChangeImage = (e) => {
 		let timerInterval;
@@ -188,11 +174,7 @@ export const ProfileScreen = () => {
 									mr: 3,
 								}}
 							>
-								<Typography
-									variant='h6'
-									color='primary'
-									sx={{ cursor: "pointer" }}
-								>
+								<Typography variant='h6' color='primary' sx={{ cursor: "pointer" }}>
 									<Tooltip title='Editar'>
 										<i className='fas fa-edit'></i>
 									</Tooltip>
@@ -228,12 +210,7 @@ export const ProfileScreen = () => {
 										mt: 2,
 									}}
 								>
-									<input
-										type='file'
-										className='dropzone'
-										name='image'
-										onChange={handleChangeImage}
-									/>
+									<input type='file' className='dropzone' name='image' onChange={handleChangeImage} />
 								</Box>
 							</Tooltip>
 						</Box>
@@ -256,16 +233,12 @@ export const ProfileScreen = () => {
 										sx={{
 											"& :hover": {
 												color: "transparent",
-												background:
-													"-webkit-radial-gradient(30% 107%, circle, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);",
+												background: "-webkit-radial-gradient(30% 107%, circle, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);",
 												backgroundClip: "text",
 											},
 										}}
 									>
-										<i
-											className='fa-brands fa-instagram'
-											style={{ fontSize: 25 }}
-										></i>
+										<i className='fa-brands fa-instagram' style={{ fontSize: 25 }}></i>
 									</IconButton>
 								)}
 
@@ -280,10 +253,7 @@ export const ProfileScreen = () => {
 											},
 										}}
 									>
-										<i
-											className='fa-brands fa-facebook'
-											style={{ fontSize: 25 }}
-										></i>
+										<i className='fa-brands fa-facebook' style={{ fontSize: 25 }}></i>
 									</IconButton>
 								)}
 
@@ -298,10 +268,7 @@ export const ProfileScreen = () => {
 											},
 										}}
 									>
-										<i
-											className='fa-brands fa-twitter'
-											style={{ fontSize: 25 }}
-										></i>
+										<i className='fa-brands fa-twitter' style={{ fontSize: 25 }}></i>
 									</IconButton>
 								)}
 
@@ -316,10 +283,7 @@ export const ProfileScreen = () => {
 											},
 										}}
 									>
-										<i
-											className='fa-brands fa-linkedin'
-											style={{ fontSize: 25 }}
-										></i>
+										<i className='fa-brands fa-linkedin' style={{ fontSize: 25 }}></i>
 									</IconButton>
 								)}
 							</Box>
@@ -350,9 +314,7 @@ export const ProfileScreen = () => {
 										Fecha Ingreso:
 									</Typography>
 
-									<Typography>
-										{moment(createdAt).format("DD/MM/YYYY")}
-									</Typography>
+									<Typography>{moment(createdAt).format("DD/MM/YYYY")}</Typography>
 								</Box>
 
 								<Box sx={{ mt: 3 }}>
@@ -406,11 +368,7 @@ export const ProfileScreen = () => {
 										Usuario
 									</Typography> */}
 
-									<Typography>
-										{type == 4
-											? "Promotor"
-											: "Profesional de la Salud"}
-									</Typography>
+									<Typography>{type == 4 ? "Promotor" : "Profesional de la Salud"}</Typography>
 								</Box>
 							</Grid>
 							<Grid
@@ -461,19 +419,13 @@ export const ProfileScreen = () => {
 
 								{payment ? (
 									<Box>
-										<Alert severity='info'>
-											Usted tiene un proceso activo para
-											cambio de plan
-										</Alert>
+										<Alert severity='info'>Usted tiene un proceso activo para cambio de plan</Alert>
 									</Box>
 								) : (
 									<Box sx={{ mt: 2 }}>
 										<Link to='/profile/payment'>
 											<Typography>
-												<Button
-													variant='contained'
-													size='small'
-												>
+												<Button variant='contained' size='small'>
 													Cambiar Plan
 												</Button>
 											</Typography>
@@ -513,19 +465,11 @@ export const ProfileScreen = () => {
 									</Typography>
 								</Box>
 
-								<WithdrawalModal
-									handleClose={handleClose}
-									open={open}
-									setOpen={setOpen}
-								/>
+								<WithdrawalModal handleClose={handleClose} open={open} setOpen={setOpen} />
 								{balance != 0 && (
 									<Box sx={{ mt: 2 }}>
 										<Typography>
-											<Button
-												onClick={handleOpen}
-												variant='contained'
-												size='small'
-											>
+											<Button onClick={handleOpen} variant='contained' size='small'>
 												Solicitar Retiro
 											</Button>
 										</Typography>
@@ -538,18 +482,9 @@ export const ProfileScreen = () => {
 					<Grid item xs={6}>
 						<Grid container spacing={2} sx={{ mt: 1 }}>
 							<Grid item xs={9}>
-								<Typography color='primary'>
-									CODIGO REFERIDO
-								</Typography>
+								<Typography color='primary'>CODIGO REFERIDO</Typography>
 
-								<TextField
-									id='codeReferral'
-									label=''
-									value={code.code}
-									size='small'
-									disabled
-									fullWidth
-								/>
+								<TextField id='codeReferral' label='' value={code.code} size='small' disabled fullWidth />
 							</Grid>
 							<Grid
 								item
@@ -558,11 +493,7 @@ export const ProfileScreen = () => {
 									mt: 3,
 								}}
 							>
-								<Button
-									variant='contained'
-									fullWidth
-									onClick={handleCopy}
-								>
+								<Button variant='contained' fullWidth onClick={handleCopy}>
 									Copiar
 								</Button>
 							</Grid>

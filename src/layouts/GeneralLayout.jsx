@@ -50,7 +50,7 @@ const style = {
 
 export const GeneralLayout = ({ children }) => {
 	const dispatch = useDispatch();
-	const { isLoading, isAuthenticated } = useSelector((state) => state.auth);
+	const { isLoading, isAuthenticated, user } = useSelector((state) => state.auth);
 
 	const navigate = useNavigate();
 
@@ -108,12 +108,7 @@ export const GeneralLayout = ({ children }) => {
 				}}
 			>
 				<Container maxWidth='lg'>
-					<Modal
-						open={open}
-						onClose={handleClose}
-						aria-labelledby='modal-modal-title'
-						aria-describedby='modal-modal-description'
-					>
+					<Modal open={open} onClose={handleClose} aria-labelledby='modal-modal-title' aria-describedby='modal-modal-description'>
 						<Box sx={style}>
 							<form onSubmit={handleSubmit}>
 								<Box
@@ -132,11 +127,7 @@ export const GeneralLayout = ({ children }) => {
 										justifyContent: "center",
 									}}
 								>
-									<Typography
-										sx={{ mt: 1, fontSize: "13px" }}
-									>
-										Ingrese con Correo y Contraseña
-									</Typography>
+									<Typography sx={{ mt: 1, fontSize: "13px" }}>Ingrese con Correo y Contraseña</Typography>
 								</Box>
 
 								<Box sx={{ mt: 5 }}>
@@ -148,15 +139,7 @@ export const GeneralLayout = ({ children }) => {
 									>
 										Correo electronico
 									</label>
-									<TextField
-										size='small'
-										fullWidth
-										placeholder='example@example.com'
-										value={email}
-										onChange={(e) =>
-											setEmail(e.target.value)
-										}
-									/>
+									<TextField size='small' fullWidth placeholder='example@example.com' value={email} onChange={(e) => setEmail(e.target.value)} />
 								</Box>
 
 								<Box sx={{ mt: 2 }}>
@@ -170,30 +153,18 @@ export const GeneralLayout = ({ children }) => {
 									</label>
 									<FormControl sx={{}} size='small' fullWidth>
 										<OutlinedInput
-											type={
-												values.showPassword
-													? "text"
-													: "password"
-											}
+											type={values.showPassword ? "text" : "password"}
 											value={values.password}
 											onChange={handleChange("password")}
 											endAdornment={
 												<InputAdornment position='end'>
 													<IconButton
 														aria-label='toggle password visibility'
-														onClick={
-															handleClickShowPassword
-														}
-														onMouseDown={
-															handleMouseDownPassword
-														}
+														onClick={handleClickShowPassword}
+														onMouseDown={handleMouseDownPassword}
 														edge='end'
 													>
-														{values.showPassword ? (
-															<VisibilityOff />
-														) : (
-															<Visibility />
-														)}
+														{values.showPassword ? <VisibilityOff /> : <Visibility />}
 													</IconButton>
 												</InputAdornment>
 											}
@@ -203,13 +174,7 @@ export const GeneralLayout = ({ children }) => {
 								</Box>
 
 								<Box sx={{ mt: 2 }}>
-									<Button
-										variant='contained'
-										color='primary'
-										size='small'
-										fullWidth
-										type='submit'
-									>
+									<Button variant='contained' color='primary' size='small' fullWidth type='submit'>
 										{isLoading ? (
 											<Box sx={{ display: "flex" }}>
 												<CircularProgress
@@ -233,9 +198,7 @@ export const GeneralLayout = ({ children }) => {
 									mt: 2,
 								}}
 							>
-								<Typography
-									sx={{ display: "flex", fontSize: "15px" }}
-								>
+								<Typography sx={{ display: "flex", fontSize: "15px" }}>
 									No tienes una cuenta?
 									<Link to='/join-us'>
 										<Typography
@@ -315,17 +278,31 @@ export const GeneralLayout = ({ children }) => {
 										display: "flex",
 									}}
 								>
-									<Link to='/profile'>
-										<Typography
-											sx={{
-												mr: 0,
-												color: "white",
-												cursor: "pointer",
-											}}
-										>
-											IR A MI PERFIL
-										</Typography>
-									</Link>
+									{user.type == 5 ? (
+										<Link to='/dashboard'>
+											<Typography
+												sx={{
+													mr: 0,
+													color: "white",
+													cursor: "pointer",
+												}}
+											>
+												IR A MI PERFIL
+											</Typography>
+										</Link>
+									) : (
+										<Link to='/profile'>
+											<Typography
+												sx={{
+													mr: 0,
+													color: "white",
+													cursor: "pointer",
+												}}
+											>
+												IR A MI PERFIL
+											</Typography>
+										</Link>
+									)}
 
 									<Box
 										sx={{
@@ -371,11 +348,7 @@ export const GeneralLayout = ({ children }) => {
 					</Box>
 				</Container>
 			</Box>
-			<AppBar
-				position='sticky'
-				sx={{ backgroundColor: "white" }}
-				className='animate__animated animate__fadeIn'
-			>
+			<AppBar position='sticky' sx={{ backgroundColor: "white" }} className='animate__animated animate__fadeIn'>
 				<Container maxWidth='lg'>
 					<Toolbar disableGutters>
 						<Box sx={{ display: "flex", alignItems: "center" }}>
@@ -403,9 +376,7 @@ export const GeneralLayout = ({ children }) => {
 								>
 									MEDS TM
 								</Typography>
-								<Typography sx={{ ml: 2, color: "black" }}>
-									Directorio Sanitario Internacional
-								</Typography>
+								<Typography sx={{ ml: 2, color: "black" }}>Directorio Sanitario Internacional</Typography>
 							</Box>
 						</Box>
 
@@ -607,9 +578,7 @@ export const GeneralLayout = ({ children }) => {
 							},
 						}}
 					/>
-					<Typography sx={{ padding: "10px" }}>
-						Copyright © 2022 MEDS TM | Powered by MEDS TM
-					</Typography>
+					<Typography sx={{ padding: "10px" }}>Copyright © 2022 MEDS TM | Powered by MEDS TM</Typography>
 				</Container>
 			</footer>
 		</>

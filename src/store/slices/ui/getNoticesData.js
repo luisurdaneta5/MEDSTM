@@ -13,7 +13,7 @@ export const getNoticesData = (page = 0) => {
 				size: 5,
 			},
 		});
-
+		console.log(data);
 		dispatch(
 			setNotices({
 				notices: data.notices.rows,

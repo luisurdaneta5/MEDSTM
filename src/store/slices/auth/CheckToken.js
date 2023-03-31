@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { Api } from "../../../api";
 import { setLoginSuccess, setLogout } from "./authSlice";
 
