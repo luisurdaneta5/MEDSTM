@@ -17,6 +17,7 @@ import {
 	TablePagination,
 	TextField,
 	IconButton,
+	Alert,
 } from "@mui/material";
 import { Api } from "../../api";
 import usdt from "../../assets/usdt.png";
@@ -30,11 +31,16 @@ import { SpecialitiesTable } from "./components/SpecialitiesTable";
 import { AddressTable } from "./components/AddressTable";
 import { WithdrawalsTable } from "./components/WithdrawalsTable";
 import copy from "copy-to-clipboard";
+import { WithdrawalModal } from "./WithdrawalModal";
 
 export const ProfileScreen = () => {
 	const uid = localStorage.getItem("id");
 	const [image, setImage] = useState("");
+	const [social, setSocial] = useState([]);
+	const [payment, setPayment] = useState("");
+	const [open, setOpen] = useState(false);
 
+	console.log(image.url);
 	const [user, setUser] = useState({
 		referrals: [],
 		my_specialities: [],
@@ -42,6 +48,14 @@ export const ProfileScreen = () => {
 		withdrawals: [],
 		code: [],
 	});
+
+	const handleOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	const [balance, setBalance] = useState(0);
 
@@ -59,22 +73,25 @@ export const ProfileScreen = () => {
 			.catch((err) => {
 				console.log(err);
 			});
+
+		Api.get("/payments/status/0", {
+			params: {
+				uid,
+			},
+		})
+			.then((res) => setPayment(res.data.exist))
+			.catch((err) => console.log(err));
+
+		Api.get("/social/getSocial", {
+			params: {
+				id: uid,
+			},
+		}).then((res) => setSocial(res.data.data));
 	}, []);
 
-	const {
-		name,
-		lastname,
-		email,
-		phone,
-		country,
-		plan,
-		my_specialities,
-		referrals,
-		addresses,
-		withdrawals,
-		createdAt,
-		code,
-	} = user;
+	const { facebook, instagram, twitter, linkedin } = social;
+
+	const { name, lastname, email, phone, country, plan, my_specialities, referrals, addresses, withdrawals, createdAt, code, type } = user;
 
 	const handleChangeImage = (e) => {
 		let timerInterval;
@@ -157,11 +174,7 @@ export const ProfileScreen = () => {
 									mr: 3,
 								}}
 							>
-								<Typography
-									variant='h6'
-									color='primary'
-									sx={{ cursor: "pointer" }}
-								>
+								<Typography variant='h6' color='primary' sx={{ cursor: "pointer" }}>
 									<Tooltip title='Editar'>
 										<i className='fas fa-edit'></i>
 									</Tooltip>
@@ -179,7 +192,7 @@ export const ProfileScreen = () => {
 						>
 							<Avatar
 								alt={name}
-								src={image.url}
+								src=''
 								sx={{
 									width: "100px",
 									height: "100px",
@@ -197,12 +210,7 @@ export const ProfileScreen = () => {
 										mt: 2,
 									}}
 								>
-									<input
-										type='file'
-										className='dropzone'
-										name='image'
-										onChange={handleChangeImage}
-									/>
+									<input type='file' className='dropzone' name='image' onChange={handleChangeImage} />
 								</Box>
 							</Tooltip>
 						</Box>
@@ -217,69 +225,67 @@ export const ProfileScreen = () => {
 							}}
 						>
 							<Box>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "transparent",
-											background:
-												"-webkit-radial-gradient(30% 107%, circle, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);",
-											backgroundClip: "text",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-instagram'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "#1877f2",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-facebook'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "#1d9bf0",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-twitter'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
-								<IconButton
-									component='a'
-									href='http://facebook.com/'
-									target='_blank'
-									sx={{
-										"& :hover": {
-											color: "#0a66c2",
-										},
-									}}
-								>
-									<i
-										className='fa-brands fa-linkedin'
-										style={{ fontSize: 25 }}
-									></i>
-								</IconButton>
+								{instagram != " " && (
+									<IconButton
+										component='a'
+										href={instagram}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "transparent",
+												background: "-webkit-radial-gradient(30% 107%, circle, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);",
+												backgroundClip: "text",
+											},
+										}}
+									>
+										<i className='fa-brands fa-instagram' style={{ fontSize: 25 }}></i>
+									</IconButton>
+								)}
+
+								{facebook !== " " && (
+									<IconButton
+										component='a'
+										href={facebook}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "#1877f2",
+											},
+										}}
+									>
+										<i className='fa-brands fa-facebook' style={{ fontSize: 25 }}></i>
+									</IconButton>
+								)}
+
+								{twitter != "" && (
+									<IconButton
+										component='a'
+										href={twitter}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "#1d9bf0",
+											},
+										}}
+									>
+										<i className='fa-brands fa-twitter' style={{ fontSize: 25 }}></i>
+									</IconButton>
+								)}
+
+								{linkedin != "" && (
+									<IconButton
+										component='a'
+										href={linkedin}
+										target='_blank'
+										sx={{
+											"& :hover": {
+												color: "#0a66c2",
+											},
+										}}
+									>
+										<i className='fa-brands fa-linkedin' style={{ fontSize: 25 }}></i>
+									</IconButton>
+								)}
 							</Box>
 						</Grid>
 						<Grid container spacing={6} sx={{ padding: 3 }}>
@@ -308,9 +314,7 @@ export const ProfileScreen = () => {
 										Fecha Ingreso:
 									</Typography>
 
-									<Typography>
-										{moment(createdAt).format("DD/MM/YYYY")}
-									</Typography>
+									<Typography>{moment(createdAt).format("DD/MM/YYYY")}</Typography>
 								</Box>
 
 								<Box sx={{ mt: 3 }}>
@@ -352,6 +356,19 @@ export const ProfileScreen = () => {
 									</Typography>
 
 									<Typography>{country}</Typography>
+								</Box>
+
+								<Box sx={{ mt: 3 }}>
+									{/* <Typography
+										sx={{
+											fontWeight: "bold",
+											fontSize: 13,
+										}}
+									>
+										Usuario
+									</Typography> */}
+
+									<Typography>{type == 4 ? "Promotor" : "Profesional de la Salud"}</Typography>
 								</Box>
 							</Grid>
 							<Grid
@@ -400,16 +417,21 @@ export const ProfileScreen = () => {
 									</Box>
 								)}
 
-								<Box sx={{ mt: 2 }}>
-									<Typography>
-										<Button
-											variant='contained'
-											size='small'
-										>
-											Cambiar Plan
-										</Button>
-									</Typography>
-								</Box>
+								{payment ? (
+									<Box>
+										<Alert severity='info'>Usted tiene un proceso activo para cambio de plan</Alert>
+									</Box>
+								) : (
+									<Box sx={{ mt: 2 }}>
+										<Link to='/profile/payment'>
+											<Typography>
+												<Button variant='contained' size='small'>
+													Cambiar Plan
+												</Button>
+											</Typography>
+										</Link>
+									</Box>
+								)}
 							</Grid>
 							<Grid
 								item
@@ -443,13 +465,11 @@ export const ProfileScreen = () => {
 									</Typography>
 								</Box>
 
+								<WithdrawalModal handleClose={handleClose} open={open} setOpen={setOpen} />
 								{balance != 0 && (
 									<Box sx={{ mt: 2 }}>
 										<Typography>
-											<Button
-												variant='contained'
-												size='small'
-											>
+											<Button onClick={handleOpen} variant='contained' size='small'>
 												Solicitar Retiro
 											</Button>
 										</Typography>
@@ -462,18 +482,9 @@ export const ProfileScreen = () => {
 					<Grid item xs={6}>
 						<Grid container spacing={2} sx={{ mt: 1 }}>
 							<Grid item xs={9}>
-								<Typography color='primary'>
-									CODIGO REFERIDO
-								</Typography>
+								<Typography color='primary'>CODIGO REFERIDO</Typography>
 
-								<TextField
-									id='codeReferral'
-									label=''
-									value={code.code}
-									size='small'
-									disabled
-									fullWidth
-								/>
+								<TextField id='codeReferral' label='' value={code.code} size='small' disabled fullWidth />
 							</Grid>
 							<Grid
 								item
@@ -482,11 +493,7 @@ export const ProfileScreen = () => {
 									mt: 3,
 								}}
 							>
-								<Button
-									variant='contained'
-									fullWidth
-									onClick={handleCopy}
-								>
+								<Button variant='contained' fullWidth onClick={handleCopy}>
 									Copiar
 								</Button>
 							</Grid>
@@ -509,20 +516,6 @@ export const ProfileScreen = () => {
 						<WithdrawalsTable withdrawals={withdrawals} />
 					</Grid>
 					<Grid item xs={6}>
-						<Box
-							sx={{
-								display: "flex",
-								justifyContent: "space-between",
-								mt: 0,
-							}}
-						>
-							<Typography color='primary'>
-								MIS DIRECCIONES
-							</Typography>
-							<Button variant='contained' size='small'>
-								Agregar Direccion
-							</Button>
-						</Box>
 						<AddressTable addresse={addresses} />
 					</Grid>
 				</Grid>

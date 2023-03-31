@@ -8,6 +8,7 @@ import { CheckToken } from "../store/slices/auth";
 import { PrivateRoute } from "./PrivateRoute";
 import { DashboardRouter } from "./DashboardRouter";
 import { PrivateRouteDashboard } from "./PrivateRouteDashboard";
+import { LoginScreen } from "../page/auth/LoginScreen";
 // import { PrivateRoute } from "./PrivateRoute";
 
 export const AppRouter = () => {

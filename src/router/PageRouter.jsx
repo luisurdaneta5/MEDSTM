@@ -18,25 +18,13 @@ export const PageRouter = () => {
 			<Route path='/' element={<HomeScreen />} />
 
 			<Route path='/join-us' element={<JoinUsScreen />} />
-			<Route
-				path='/join-us/user-type/:plan'
-				element={<UserTypeScreen />}
-			/>
+			<Route path='/join-us/user-type/:plan' element={<UserTypeScreen />} />
 
-			<Route
-				path='/join-us/user-type/free/:user'
-				element={<FreeScreen />}
-			/>
+			<Route path='/join-us/user-type/free/:user' element={<FreeScreen />} />
 
-			<Route
-				path='/join-us/user-type/premiun/:user'
-				element={<PremiunScreen />}
-			/>
+			<Route path='/join-us/user-type/premiun/:user' element={<PremiunScreen />} />
 
-			<Route
-				path='/join-us/user-type/vip/:user'
-				element={<VipScreen />}
-			/>
+			<Route path='/join-us/user-type/vip/:user' element={<VipScreen />} />
 
 			<Route path='/register/:user' element={<RegisterScreen />} />
 
@@ -44,7 +32,7 @@ export const PageRouter = () => {
 
 			<Route path='/contact-us' element={<ContactScreen />} />
 
-			<Route path='/search' element={<SearchScreen />} />
+			<Route path='/search/:query' element={<SearchScreen />} />
 
 			<Route path='*' element={<Navigate to='/' />} />
 		</Routes>

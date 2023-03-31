@@ -2,7 +2,7 @@ import { DashboardLayout } from "../../../layouts/DashboardLayout";
 import { Container, Box, TextField, Typography, Button } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { Api } from "../../../api";
 import { setUpdateSpeciality } from "../../../store/slices/dashboard";
@@ -19,7 +19,7 @@ export const SpecialityEditScreen = () => {
 	};
 
 	useEffect(() => {
-		Api.get("/specialities", {
+		Api.get("/specialities/single/get", {
 			params: {
 				id,
 			},
@@ -60,42 +60,18 @@ export const SpecialityEditScreen = () => {
 						>
 							Especialidad:
 						</label>
-						<TextField
-							id='outlined-basic'
-							label=''
-							size='small'
-							autoComplete='off'
-							name='name'
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
+						<TextField id='outlined-basic' label='' size='small' autoComplete='off' name='name' value={name} onChange={(e) => setName(e.target.value)} />
 					</Box>
 
 					<Box sx={{ mt: 2 }}>
 						{swicth ? (
-							<input
-								type='file'
-								className='dropzone'
-								name='img'
-								accept='image/png,image/jpeg'
-								onChange={(e) => setImage(e.target.files[0])}
-							/>
+							<input type='file' className='dropzone' name='img' accept='image/png,image/jpeg' onChange={(e) => setImage(e.target.files[0])} />
 						) : (
-							<Box
-								onClick={handleSwicth}
-								component='div'
-								className='img-container'
-							>
+							<Box onClick={handleSwicth} component='div' className='img-container'>
 								<Box component='p' className='div-text'>
 									Click para cambiar la imagen
 								</Box>
-								<img
-									src={
-										"https://medstmsaludesvida.com/wp-content/uploads/2022/05/MEDS-TM-Administradores.png"
-									}
-									width='100%'
-									alt='medstm'
-								/>
+								<img src={image} width='100%' alt='medstm' />
 							</Box>
 						)}
 					</Box>
@@ -107,21 +83,15 @@ export const SpecialityEditScreen = () => {
 							mt: 3,
 						}}
 					>
-						<Button
-							variant='contained'
-							color='primary'
-							type='submit'
-						>
+						<Button variant='contained' color='primary' type='submit'>
 							Enviar
 						</Button>
 
-						<Button
-							variant='contained'
-							color='error'
-							sx={{ ml: 2 }}
-						>
-							cancelar
-						</Button>
+						<Link to={"/dashboard/speciality"}>
+							<Button variant='contained' color='error' sx={{ ml: 2 }}>
+								cancelar
+							</Button>
+						</Link>
 					</Box>
 				</form>
 			</Container>

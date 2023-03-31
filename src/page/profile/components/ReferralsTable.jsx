@@ -1,16 +1,5 @@
 import React, { useState } from "react";
-import {
-	Box,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TablePagination,
-	TableRow,
-	Tooltip,
-	Typography,
-} from "@mui/material";
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from "@mui/material";
 
 export const ReferralsTable = ({ referrals }) => {
 	function createData(name, lastname, plan) {
@@ -19,9 +8,7 @@ export const ReferralsTable = ({ referrals }) => {
 
 	// const refers = [createData("Luis", "Urdaneta", "Gratis")];
 
-	const refers = referrals.map((refer) =>
-		createData(refer.user.name, refer.user.lastname, refer.user.plan)
-	);
+	const refers = referrals.map((refer) => createData(refer.user.name, refer.user.lastname, refer.user.plan));
 
 	const [rowsPerPageRefer, setRowsPerPageRefer] = useState(5);
 	const [pageRefer, setPageRefer] = useState(0);
@@ -81,7 +68,7 @@ export const ReferralsTable = ({ referrals }) => {
 											</Tooltip>
 										)}
 
-										{refer.plan === "Basic" && (
+										{refer.plan === "Basico" && (
 											<Tooltip title='Basica'>
 												<i
 													className='fa-solid fa-medal'

@@ -26,16 +26,17 @@ import { useState, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import { Api } from "../../../api";
+import { Link } from "react-router-dom";
 
-function createData(name, lastname, plan, vencimiento, status) {
-	return { name, lastname, plan, vencimiento, status };
+function createData(id, avatar, name, lastname, plan, vencimiento, status) {
+	return { id, avatar, name, lastname, plan, vencimiento, status };
 }
 
 export const MedsScreen = () => {
 	const [meds, setMeds] = useState([]);
 
 	useEffect(() => {
-		Api.get(`/user/all?type=${3}`)
+		Api.get(`/user/all?type=3`)
 			.then((res) => {
 				setMeds(res.data.users);
 			})
@@ -45,13 +46,7 @@ export const MedsScreen = () => {
 	}, []);
 
 	const rows = meds.map((med) => {
-		return createData(
-			med.name,
-			med.lastname,
-			med.plan,
-			Date.now(),
-			med.status
-		);
+		return createData(med.id, med.documents[0].url, med.name, med.lastname, med.plan, Date.now(), med.status);
 	});
 
 	const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -96,21 +91,42 @@ export const MedsScreen = () => {
 		setPage(0);
 	};
 
+	// const handleDelete = (id) => {
+	// 	Api.delete("/user/dashboard/deleteUser", {
+	// 		params: {
+	// 			id,
+	// 		},
+	// 	}).then((res) => {
+	// 		toast.success(res.data.message, {
+	// 			position: "top-right",
+	// 			autoClose: 5000,
+	// 			hideProgressBar: false,
+	// 			closeOnClick: true,
+	// 			pauseOnHover: true,
+	// 			draggable: true,
+	// 			progress: undefined,
+	// 		});
+	// 		navigate("/dashboard/meds");
+	// 	});
+	// };
 	return (
 		<DashboardLayout>
-			<Tooltip title='Crear Nuevo'>
-				<Fab
-					color='primary'
-					aria-label='add'
-					sx={{
-						position: "fixed",
-						bottom: "2rem",
-						right: "2rem",
-					}}
-				>
-					<AddIcon />
-				</Fab>
-			</Tooltip>
+			<Link to='/dashboard/meds/create'>
+				<Tooltip title='Crear Nuevo'>
+					<Fab
+						color='primary'
+						aria-label='add'
+						sx={{
+							position: "fixed",
+							bottom: "2rem",
+							right: "2rem",
+						}}
+					>
+						<AddIcon />
+					</Fab>
+				</Tooltip>
+			</Link>
+
 			<Box sx={{ mb: 5 }}>
 				<Typography variant='h6' componet='div'>
 					Profesionales de la Salud
@@ -135,10 +151,7 @@ export const MedsScreen = () => {
 					/>
 				</FormControl>
 			</Box>
-			<TableContainer
-				component={Paper}
-				sx={{ border: "1px solid black" }}
-			>
+			<TableContainer component={Paper} sx={{ border: "1px solid black" }}>
 				{/* <Box
 					sx={{
 						display: "flex",
@@ -171,215 +184,198 @@ export const MedsScreen = () => {
 								</TableCell>
 							</TableRow>
 						) : (
-							results
-								.slice(
-									page * rowsPerPage,
-									page * rowsPerPage + rowsPerPage
-								)
-								.map((row, index) => (
-									<TableRow
-										key={index}
-										sx={{
-											"&:last-child td, &:last-child th":
-												{
-													border: 0,
-												},
-										}}
-									>
-										<TableCell>
-											<Avatar
-												alt={row.name}
-												src='/static/images/avatar/1.jpg'
-											/>
-										</TableCell>
-										<TableCell component='th' scope='row'>
-											{row.name} {row.lastname}
-										</TableCell>
-										<TableCell align='center'>
-											{row.plan === "Gratis" && (
-												<Tooltip title='Gratis'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "green",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Basic" && (
-												<Tooltip title='Basica'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#000080",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Bronce" && (
-												<Tooltip title='Bronce'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#800000",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Plata" && (
-												<Tooltip title='Plata'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#333333",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Oro" && (
-												<Tooltip title='Oro'>
-													<i
-														className='fa-solid fa-medal'
-														style={{
-															fontSize: 18,
-															color: "#ff9900",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Zafiro" && (
-												<Tooltip title='Zafiro'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#800080",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Rubi" && (
-												<Tooltip title='Rubi'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#ff0000",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Esmeralda" && (
-												<Tooltip title='Esmeralda'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#008000",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-
-											{row.plan === "Diamante" && (
-												<Tooltip title='Diamante'>
-													<i
-														className='fa-solid fa-gem'
-														style={{
-															fontSize: 18,
-															color: "#ff00ff",
-															cursor: "pointer",
-														}}
-													></i>
-												</Tooltip>
-											)}
-										</TableCell>
-										<TableCell align='center'>
-											{row.status === 1 ? (
-												<Alert
-													severity='success'
-													size='small'
-													sx={{
-														textAlign: "center",
+							results.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => (
+								<TableRow
+									key={row.id}
+									sx={{
+										"&:last-child td, &:last-child th": {
+											border: 0,
+										},
+									}}
+								>
+									<TableCell>
+										<Avatar alt={row.name} src={row.avatar} />
+									</TableCell>
+									<TableCell component='th' scope='row'>
+										{row.name} {row.lastname}
+									</TableCell>
+									<TableCell align='center'>
+										{row.plan === "Gratis" && (
+											<Tooltip title='Gratis'>
+												<i
+													className='fa-solid fa-medal'
+													style={{
+														fontSize: 18,
+														color: "green",
+														cursor: "pointer",
 													}}
-												>
-													Activo
-												</Alert>
-											) : (
-												<Alert
-													severity='error'
-													size='small'
-													sx={{
-														textAlign: "center",
-													}}
-												>
-													Inactivo
-												</Alert>
-											)}
-										</TableCell>
-										<TableCell align='center'>
-											{row.plan === "Gratis" ? (
-												<Typography>
-													Ilimitada
-												</Typography>
-											) : (
-												row.vencimiento
-											)}
-										</TableCell>
+												></i>
+											</Tooltip>
+										)}
 
-										<TableCell align='right'>
-											<Grid
-												container
-												spacing={1}
+										{row.plan === "Basic" && (
+											<Tooltip title='Basica'>
+												<i
+													className='fa-solid fa-medal'
+													style={{
+														fontSize: 18,
+														color: "#000080",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Bronce" && (
+											<Tooltip title='Bronce'>
+												<i
+													className='fa-solid fa-medal'
+													style={{
+														fontSize: 18,
+														color: "#800000",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Plata" && (
+											<Tooltip title='Plata'>
+												<i
+													className='fa-solid fa-medal'
+													style={{
+														fontSize: 18,
+														color: "#333333",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Oro" && (
+											<Tooltip title='Oro'>
+												<i
+													className='fa-solid fa-medal'
+													style={{
+														fontSize: 18,
+														color: "#ff9900",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Zafiro" && (
+											<Tooltip title='Zafiro'>
+												<i
+													className='fa-solid fa-gem'
+													style={{
+														fontSize: 18,
+														color: "#800080",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Rubi" && (
+											<Tooltip title='Rubi'>
+												<i
+													className='fa-solid fa-gem'
+													style={{
+														fontSize: 18,
+														color: "#ff0000",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Esmeralda" && (
+											<Tooltip title='Esmeralda'>
+												<i
+													className='fa-solid fa-gem'
+													style={{
+														fontSize: 18,
+														color: "#008000",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+
+										{row.plan === "Diamante" && (
+											<Tooltip title='Diamante'>
+												<i
+													className='fa-solid fa-gem'
+													style={{
+														fontSize: 18,
+														color: "#ff00ff",
+														cursor: "pointer",
+													}}
+												></i>
+											</Tooltip>
+										)}
+									</TableCell>
+									<TableCell align='center'>
+										{row.status === 1 ? (
+											<Alert
+												severity='success'
+												size='small'
 												sx={{
-													display: "flex",
-													justifyContent:
-														"space-between",
+													textAlign: "center",
 												}}
 											>
-												<Grid item sm={6}>
-													<Button
-														variant='contained'
-														size='small'
-														fullWidth
-													>
+												Activo
+											</Alert>
+										) : (
+											<Alert
+												severity='error'
+												size='small'
+												sx={{
+													textAlign: "center",
+												}}
+											>
+												Inactivo
+											</Alert>
+										)}
+									</TableCell>
+									<TableCell align='center'>
+										{row.plan === "Gratis" ? <Typography>Ilimitada</Typography> : row.vencimiento}
+									</TableCell>
+
+									<TableCell align='right'>
+										<Grid
+											container
+											spacing={1}
+											sx={{
+												display: "flex",
+												justifyContent: "space-between",
+											}}
+										>
+											<Grid item sm={12}>
+												<Link to={`/dashboard/meds/edit/${row.id}`}>
+													<Button variant='contained' size='small' fullWidth>
 														Editar
 													</Button>
-												</Grid>
-
-												<Grid item sm={6}>
-													<Button
-														variant='contained'
-														size='small'
-														fullWidth
-														color='error'
-													>
-														Eliminar
-													</Button>
-												</Grid>
+												</Link>
 											</Grid>
-										</TableCell>
-									</TableRow>
-								))
+
+											{/* <Grid item sm={6}>
+												<Button
+													variant='contained'
+													size='small'
+													fullWidth
+													color='error'
+													onClick={() => handleDelete(row.id)}
+												>
+													Eliminar
+												</Button>
+											</Grid> */}
+										</Grid>
+									</TableCell>
+								</TableRow>
+							))
 						)}
 					</TableBody>
 				</Table>

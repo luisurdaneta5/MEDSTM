@@ -10,7 +10,10 @@ import {
 	TableRow,
 	Tooltip,
 	Button,
+	Typography,
 } from "@mui/material";
+import moment from "moment";
+import usdt from "../../../assets/usdt.png";
 
 export const WithdrawalsTable = ({ withdrawals }) => {
 	function createData(amount, wallet, date) {
@@ -18,19 +21,19 @@ export const WithdrawalsTable = ({ withdrawals }) => {
 	}
 
 	const withdrawalss = withdrawals.map((withdrawal) =>
-		createData(withdrawal.amount, withdrawal.wallet, withdrawal.date)
+		createData(withdrawal.amount, withdrawal.wallet, withdrawal.createdAt)
 	);
 
-	const [rowsPerPageRefer, setRowsPerPageRefer] = useState(5);
-	const [pageRefer, setPageRefer] = useState(0);
+	const [rowsPerPageWithdrawal, setRowsPerPageWithdrawal] = useState(5);
+	const [pageWithdrawal, setPageWithdrawal] = useState(0);
 
-	const handleChangePageRefer = (e, newPage) => {
-		setPageRefer(newPage);
+	const handleChangePageWithdrawal = (e, newPage) => {
+		setPageWithdrawal(newPage);
 	};
 
-	const handleChangeRowsPerPageRefer = (e) => {
-		setRowsPerPageRefer(parseInt(e.target.value, 10));
-		setPageRefer(0);
+	const handleChangeRowsPerPageWithdrawal = (e) => {
+		setRowsPerPageWithdrawal(parseInt(e.target.value, 10));
+		setPageWithdrawal(0);
 	};
 	return (
 		<Box>
@@ -54,14 +57,26 @@ export const WithdrawalsTable = ({ withdrawals }) => {
 						) : (
 							withdrawalss.map((withdrawal, index) => (
 								<TableRow key={index}>
-									<TableCell align='left'>
-										{withdrawal.amount}
+									<TableCell
+										align='left'
+										sx={{
+											display: "flex",
+											alignItems: "center",
+										}}
+									>
+										<Typography sx={{ mr: 1 }}>
+											$ {withdrawal.amount.toFixed(2)}
+										</Typography>
+										<img src={usdt} alt='usdt' width={20} />
 									</TableCell>
 									<TableCell align='left'>
 										{withdrawal.wallet}
 									</TableCell>
 									<TableCell align='left'>
-										{withdrawal.date}
+										{moment().format(
+											"DD/MM/YYYY",
+											withdrawal.date
+										)}
 									</TableCell>
 								</TableRow>
 							))
@@ -73,14 +88,10 @@ export const WithdrawalsTable = ({ withdrawals }) => {
 				rowsPerPageOptions={[5]}
 				component='div'
 				count={withdrawalss.length}
-				rowsPerPage={rowsPerPageRefer}
-				page={pageRefer}
-				onPageChange={handleChangePageRefer}
-				onRowsPerPageChange={handleChangeRowsPerPageRefer}
-				labelDisplayedRows={({ from, to, count }) => {
-					return "" + from + "-" + to + " a " + count;
-				}}
-				labelRowsPerPage='Filas por página'
+				rowsPerPage={rowsPerPageWithdrawal}
+				page={pageWithdrawal}
+				onPageChange={handleChangePageWithdrawal}
+				onRowsPerPageChange={handleChangeRowsPerPageWithdrawal}
 			/>
 		</Box>
 	);

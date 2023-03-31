@@ -1,17 +1,4 @@
-import {
-	Box,
-	Divider,
-	Drawer,
-	Toolbar,
-	Typography,
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemText,
-	ListItemIcon,
-	Grid,
-	Avatar,
-} from "@mui/material";
+import { Box, Divider, Drawer, Toolbar, Typography, List, ListItem, ListItemButton, ListItemText, ListItemIcon, Grid, Avatar } from "@mui/material";
 import logo from "../../../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
@@ -181,6 +168,26 @@ export const SideBar = ({ drawerWidth = 240 }) => {
 								</ListItemIcon>
 								<Grid container>
 									<ListItemText>Especialidades</ListItemText>
+								</Grid>
+							</ListItemButton>
+						</ListItem>
+					</Link>
+
+					<Link to='/dashboard/payments'>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemIcon>
+									<i
+										className='fa-solid fa-money-bill'
+										style={{
+											color: "white",
+											fontSize: 18,
+											marginLeft: 5,
+										}}
+									></i>
+								</ListItemIcon>
+								<Grid container>
+									<ListItemText>Pagos</ListItemText>
 								</Grid>
 							</ListItemButton>
 						</ListItem>

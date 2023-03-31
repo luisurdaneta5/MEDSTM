@@ -3,3 +3,8 @@
 a {
 	text-decoration: none;
 }
+
+footer {
+	position: relative;
+	width: 100%;
+}
