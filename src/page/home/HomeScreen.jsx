@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { getCountriesData } from "../../store/slices/ui/getCountriesData";
 import { useDispatch, useSelector } from "react-redux";
 import { Api } from "../../api";
+import medsXl from "../../assets/meds-xl.png";
+import medsLg from "../../assets/meds-lg.png";
 
 export const HomeScreen = () => {
 	const dispatch = useDispatch();
@@ -64,8 +66,8 @@ export const HomeScreen = () => {
 					height: "550px",
 					width: "100%",
 					backgroundImage: {
-						xl: `url(src/assets/meds-xl.png)`,
-						lg: `url(src/assets/meds-lg.png)`,
+						xl: `url(${medsXl})`,
+						lg: `url(${medsLg})`,
 					},
 				}}
 			>

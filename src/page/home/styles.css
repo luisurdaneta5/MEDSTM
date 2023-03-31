@@ -3,10 +3,10 @@
 	width: 100% !important;
 }
 
-.box-img {
-	background-image: url("../../../src/assets/meds-lg.png");
+/* .box-img {
+	background-image: url("/assets/meds-lg.png");
 	background-repeat: no-repeat;
-}
+} */
 
 .paper-st {
 	position: absolute;
