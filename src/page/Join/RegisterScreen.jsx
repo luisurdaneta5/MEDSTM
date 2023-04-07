@@ -1,16 +1,5 @@
 import { GeneralLayout } from "../../layouts/GeneralLayout";
-import {
-	Box,
-	Container,
-	Grid,
-	InputLabel,
-	TextField,
-	Typography,
-	Checkbox,
-	Button,
-	Input,
-	Autocomplete,
-} from "@mui/material";
+import { Box, Container, Grid, InputLabel, TextField, Typography, Checkbox, Button, Input, Autocomplete } from "@mui/material";
 import { countries } from "../../data/countries";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
@@ -30,6 +19,7 @@ const initialState = {
 	phone: "",
 	file1: "",
 	file2: "",
+	code: "",
 };
 
 export const RegisterScreen = () => {
@@ -38,8 +28,7 @@ export const RegisterScreen = () => {
 	const dispatch = useDispatch();
 
 	const [formValues, handleInputChange] = useForm(initialState);
-	const { firstName, lastName, email, city, province, phone, code } =
-		formValues;
+	const { firstName, lastName, email, city, province, phone, code } = formValues;
 
 	const [country_value, setCountry_value] = useState({
 		country: "",
@@ -87,38 +76,10 @@ export const RegisterScreen = () => {
 						});
 					}
 				} else {
-					dispatch(
-						setRegister(
-							user,
-							firstName,
-							lastName,
-							email,
-							country,
-							city,
-							province,
-							country_code,
-							phone,
-							code,
-							file1,
-							file2
-						)
-					);
+					dispatch(setRegister(user, firstName, lastName, email, country, city, province, country_code, phone, code, file1, file2));
 				}
 			} else {
-				dispatch(
-					setRegister(
-						user,
-						firstName,
-						lastName,
-						email,
-						country,
-						city,
-						province,
-						country_code,
-						phone,
-						code
-					)
-				);
+				dispatch(setRegister(user, firstName, lastName, email, country, city, province, country_code, phone, code));
 			}
 
 			// navigate("/", {
@@ -151,26 +112,10 @@ export const RegisterScreen = () => {
 					<form onSubmit={handleSubmit} encType='multipart/form-data'>
 						<Grid container spacing={2} sx={{ mt: 3 }}>
 							<Grid item lg={6}>
-								<TextField
-									id=''
-									label='Nombre'
-									name='firstName'
-									value={firstName}
-									size='small'
-									fullWidth
-									onChange={handleInputChange}
-								/>
+								<TextField id='' label='Nombre' name='firstName' value={firstName} size='small' fullWidth onChange={handleInputChange} />
 							</Grid>
 							<Grid item lg={6}>
-								<TextField
-									id=''
-									label='Apellido'
-									name='lastName'
-									value={lastName}
-									size='small'
-									fullWidth
-									onChange={handleInputChange}
-								/>
+								<TextField id='' label='Apellido' name='lastName' value={lastName} size='small' fullWidth onChange={handleInputChange} />
 							</Grid>
 							<Grid item lg={6}>
 								<TextField
@@ -185,16 +130,7 @@ export const RegisterScreen = () => {
 								/>
 							</Grid>
 							<Grid item lg={6}>
-								<TextField
-									id=''
-									label='Telefono'
-									name='phone'
-									value={phone}
-									size='small'
-									fullWidth
-									placeholder='+1 (555) 555-5555'
-									onChange={handleInputChange}
-								/>
+								<TextField id='' label='Telefono' name='phone' value={phone} size='small' fullWidth placeholder='+1 (555) 555-5555' onChange={handleInputChange} />
 							</Grid>
 							<Grid item lg={4} sx={{ mt: 1 }}>
 								<Autocomplete
@@ -245,28 +181,10 @@ export const RegisterScreen = () => {
 							</Grid>
 
 							<Grid item lg={4} sx={{ mt: 1 }}>
-								<TextField
-									id=''
-									label='Provincia/Estado'
-									value={province}
-									name='province'
-									size='small'
-									fullWidth
-									placeholder=''
-									onChange={handleInputChange}
-								/>
+								<TextField id='' label='Provincia/Estado' value={province} name='province' size='small' fullWidth placeholder='' onChange={handleInputChange} />
 							</Grid>
 							<Grid item lg={4} sx={{ mt: 1 }}>
-								<TextField
-									id=''
-									label='Ciudad/Municipio'
-									value={city}
-									name='city'
-									size='small'
-									fullWidth
-									placeholder=''
-									onChange={handleInputChange}
-								/>
+								<TextField id='' label='Ciudad/Municipio' value={city} name='city' size='small' fullWidth placeholder='' onChange={handleInputChange} />
 							</Grid>
 							{user === "professional-healthcare" ? (
 								<Grid container spacing={2} sx={{ mt: 1 }}>
@@ -280,15 +198,7 @@ export const RegisterScreen = () => {
 										>
 											Curriculum
 										</InputLabel>
-										<Input
-											type='file'
-											className='dropzone'
-											fullWidth
-											disableUnderline={true}
-											onChange={handleFileChange1}
-											name='file1'
-											required
-										/>
+										<Input type='file' className='dropzone' fullWidth disableUnderline={true} onChange={handleFileChange1} name='file1' required />
 									</Grid>
 
 									<Grid item lg={6}>
@@ -301,25 +211,15 @@ export const RegisterScreen = () => {
 										>
 											Titulo Universitario
 										</InputLabel>
-										<Input
-											type='file'
-											className='dropzone'
-											fullWidth
-											disableUnderline={true}
-											onChange={handleFileChange2}
-											name='file2'
-										/>
+										<Input type='file' className='dropzone' fullWidth disableUnderline={true} onChange={handleFileChange2} name='file2' />
 									</Grid>
 								</Grid>
 							) : null}
 
 							<Grid item lg={12}>
 								<Typography color='red' sx={{ fontSize: 13 }}>
-									Nota: luego del registro se debe esperar un
-									lapso de x para la revision de documentos
-									enviados en dicho formulario, posterior
-									recivira un corero con la aprobacion de los
-									mismo
+									Nota: luego del registro se debe esperar un lapso de x para la revision de documentos enviados en dicho formulario, posterior recivira un corero
+									con la aprobacion de los mismo
 								</Typography>
 							</Grid>
 							<Grid item lg={12}>
@@ -336,29 +236,14 @@ export const RegisterScreen = () => {
 											textAlign: "center",
 										}}
 									>
-										<Checkbox
-											checked={checked}
-											onChange={handleCheckBoxChange}
-											name='terms'
-										/>
+										<Checkbox checked={checked} onChange={handleCheckBoxChange} name='terms' />
 
 										<Typography sx={{ fontSize: 15 }}>
-											Acepto los terminos y condiciones{" "}
-											<span style={{ color: "red" }}>
-												(*)
-											</span>
+											Acepto los terminos y condiciones <span style={{ color: "red" }}>(*)</span>
 										</Typography>
 									</Box>
 									<Grid item lg={2} sx={{ mt: 1 }}>
-										<TextField
-											id=''
-											label='Codigo de Referido'
-											value={code}
-											name='code'
-											size='small'
-											placeholder=''
-											onChange={handleInputChange}
-										/>
+										<TextField id='' label='Codigo de Referido' value={code} name='code' size='small' placeholder='' onChange={handleInputChange} />
 									</Grid>
 								</Box>
 							</Grid>
@@ -370,13 +255,7 @@ export const RegisterScreen = () => {
 								justifyContent: "center",
 							}}
 						>
-							<Button
-								variant='contained'
-								color='primary'
-								sx={{ mt: 3 }}
-								onClick={handleSubmit}
-								type='submit'
-							>
+							<Button variant='contained' color='primary' sx={{ mt: 3 }} onClick={handleSubmit} type='submit'>
 								Registrarte
 							</Button>
 						</Box>
